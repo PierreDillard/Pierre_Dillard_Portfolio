@@ -53,7 +53,8 @@ if (!isStoragePreview || !probeRun) {
   assert.equal(competingWrites.filter((result) => result.status === 'fulfilled').length, 1);
   const failedWrite = competingWrites.find((result) => result.status === 'rejected');
   assert.ok(failedWrite?.status === 'rejected');
-  assert.ok(failedWrite.reason instanceof BlobPreconditionFailedError);
+  assert.ok(failedWrite.reason instanceof BlobPreconditionFailedError,
+    `Concurrent rejection: ${failedWrite.reason?.name}: ${failedWrite.reason?.message}`);
 
   const winningDocument = await readDocument();
   assert.ok(winningDocument);
