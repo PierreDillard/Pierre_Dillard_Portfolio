@@ -1,0 +1,9 @@
+.DS_Store
+
+v2/node_modules/
+v2/.next/
+v2/*.tsbuildinfo
+v2/.env.local
+v2/.env.*.local
+v2/content/backups/*.json
+/tasks/

@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 2,
+  "profile": {
+    "name": "Pierre Dillard",
+    "location": "Marly-le-Roi, France",
+    "year": "2026",
+    "kicker": "Développeur React / TypeScript — Temps réel, monitoring & outils techniques",
+    "heroTitle": "Je transforme des systèmes techniques complexes en outils clairs, temps réel et exploitables.",
+    "heroAccent": "systèmes techniques complexes",
+    "heroLead": "Je conçois des applications web pour comprendre ce qui se passe réellement dans un système : flux temps réel, pipelines, graphes, logs, métriques et états de fonctionnement.\n\nChez Télécom Paris, je travaille au sein de l’écosystème open source GPAC sur un outil de monitoring capable d’inspecter des pipelines multimédia complexes en direct.\n\nMon rôle ne consiste pas seulement à construire des écrans React. Je dois comprendre le système derrière l’interface, structurer ses données, gérer des flux fréquents et rendre l’ensemble lisible pour ceux qui l’utilisent.",
+    "introTitle": "Comprendre le système avant de construire l’interface.",
+    "introAccent": "avant de construire l’interface",
+    "introStatement": "Je développe des interfaces techniques qui permettent de voir, comprendre et diagnostiquer des systèmes complexes sans masquer leur fonctionnement.",
+    "introBody": "Mon terrain principal est aujourd’hui le monitoring temps réel.\n\nAvec GPAC Monitor, j’ai travaillé sur la visualisation de pipelines multimédia, l’inspection des filtres et de leurs flux, les logs, les métriques système, les statistiques de session et la communication WebSocket avec le runtime GPAC.\n\nCes contraintes m’ont amené à travailler sur des problématiques très concrètes : architecture frontend, gestion d’état, fréquence des mises à jour, performance de rendu, visualisation de graphes et séparation claire entre transport, logique métier et interface.\n\nJe travaille principalement avec React, TypeScript, Redux Toolkit, React Flow, WebSocket et Node.js / QuickJS.\n\nJ’utilise également l’IA comme un véritable outil d’ingénierie : cadrage de tâches, analyse de bugs, recherche dans une base de connaissances, documentation, revue technique et création de workflows spécialisés. L’objectif reste le même : aller plus vite sans perdre la maîtrise du code ni de l’architecture.",
+    "expertiseTags": [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Applications temps réel",
+      "WebSocket",
+      "Dashboards de monitoring",
+      "Visualisation de données",
+      "Visualisation de graphes",
+      "React Flow",
+      "Redux Toolkit",
+      "Architecture frontend",
+      "Performance UI",
+      "Node.js",
+      "QuickJS",
+      "GPAC",
+      "Pipelines multimédia",
+      "Open Source",
+      "Documentation technique",
+      "IA appliquée au développement",
+      "Claude Code & Codex",
+      "MCP & outils de connaissance",
+      "CI/CD",
+      "GitHub Actions",
+      "Linux"
+    ],
+    "contactKicker": "Vous développez un produit technique, un dashboard, un outil temps réel ou une interface qui doit rendre un système complexe réellement compréhensible ?\n\nC’est précisément le type de problème sur lequel j’aime travailler.\n\nJe suis particulièrement intéressé par les environnements où le frontend ne se limite pas à afficher des données, mais devient un véritable outil d’observation, de compréhension et de décision.",
+    "contactTitle": "Parlons de votre prochain problème à résoudre.",
+    "contactAccent": "problème à résoudre",
+    "email": "pierredillard@gmail.com",
+    "portraitSrc": "/media/pierre.jpg",
+    "cvSrc": "/media/CV_Pierre_Dillard_2026.pdf",
+    "siteTitle": "Pierre Dillard — Développeur React TypeScript | Temps réel & Monitoring",
+    "siteDescription": "Portfolio de Pierre Dillard, développeur React / TypeScript spécialisé dans les interfaces techniques temps réel, les dashboards de monitoring, WebSocket, la visualisation de systèmes complexes et l’IA appliquée au développement.",
+    "featuredTitle": "Des projets construits autour de vrais problèmes techniques.",
+    "featuredAccent": "vrais problèmes techniques",
+    "featuredDescription": "Je préfère montrer des projets qui ont une contrainte, des utilisateurs et un problème réel à résoudre.\n\nGPAC Monitor en est le meilleur exemple : transformer un moteur multimédia complexe et ses flux de données en une interface de monitoring capable d’aider développeurs, chercheurs et utilisateurs techniques à comprendre rapidement ce qui se passe dans une session.\n\nLes projets présentés ici montrent autant le résultat visuel que le raisonnement derrière : architecture, temps réel, performance, choix d’interface, documentation et évolutions du produit.",
+    "otherTitle": "D’autres projets, d’autres contextes.",
+    "otherAccent": "d’autres contextes",
+    "journalTitle": "Ce que j’apprends en construisant.",
+    "journalAccent": "en construisant",
+    "footerText": "Pierre Dillard — React / TypeScript · Monitoring · Temps réel · Open Source · IA appliquée"
+  },
+  "projects": [
+    {
+      "slug": "gpac-monitor",
+      "number": "01",
+      "title": "GPAC Monitor",
+      "subtitle": "Voir ce qui se passe dans un pipeline vidéo.",
+      "category": "Monitoring vidéo · Télécom Paris / GPAC",
+      "period": "2024 — présent",
+      "status": "livré",
+      "lead": "Une interface de diagnostic pour suivre les filtres, les flux audio et vidéo, les métriques et les événements d’une session GPAC — en direct ou lors de sa relecture.",
+      "role": "Conception et développement full-stack de l’interface, de la communication temps réel et du système de relecture.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Redux Toolkit",
+        "React Flow",
+        "uPlot",
+        "WebSocket",
+        "QuickJS",
+        "GPAC"
+      ],
+      "metrics": [
+        {
+          "value": "851 → 105 ms",
+          "label": "INP mesuré",
+          "context": "Après optimisation du graphe et de la fréquence des mises à jour."
+        },
+        {
+          "value": "0,00",
+          "label": "CLS mesuré",
+          "context": "Stabilité visuelle de l’interface."
+        },
+        {
+          "value": "900+",
+          "label": "tests automatisés",
+          "context": "Chiffre déclaré dans le CV 2026."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Le problème à résoudre",
+          "body": "Un pipeline GPAC est un graphe vivant : les filtres apparaissent, les connexions changent et chaque PID transporte ses propres propriétés média. Les logs seuls rendent difficile la lecture de cette activité, surtout lorsque la session dure ou qu’un incident ne se reproduit pas facilement."
+        },
+        {
+          "heading": "Une lecture du système, pas seulement un tableau de bord",
+          "body": "L’interface réunit le graphe des filtres, les détails des PIDs, les statistiques de session, les métriques CPU et mémoire, et les logs. La sélection d’un filtre permet de relier sa place dans le pipeline à ses propriétés, ses arguments et son état.",
+          "points": [
+            "Graphe interactif des filtres et des connexions.",
+            "Détails des flux : codec, type média, dimensions, débit et état des PIDs.",
+            "Widgets de monitoring et métriques de statut par filtre."
+          ]
+        },
+        {
+          "heading": "Une intégration directe à l’API GPAC",
+          "body": "Le serveur de monitoring s’exécute dans le runtime QuickJS embarqué de GPAC. Il utilise les callbacks de FilterSession pour suivre la création et la suppression des filtres, la reconfiguration des PIDs et les changements d’arguments. Il lit les propriétés et statistiques des PIDs via les bindings GPAC, puis transmet des messages ciblés au navigateur par WebSocket RMT.",
+          "points": [
+            "Callbacks de session et boucle de monitoring partagée.",
+            "Abonnements par type de données et fréquence contrôlée.",
+            "Collecte des propriétés IPID/OPID, avec conservation du lien vers le filtre source."
+          ]
+        },
+        {
+          "heading": "Rejouer pour comprendre",
+          "body": "Le mode History / Replay enregistre les événements et des états de référence. Lors d’un seek, un checkpoint sert de base, puis les événements reconstruisent l’état visible : graphe, arguments, PIDs, statuts et logs. Le même pipeline d’actions alimente le direct et l’historique."
+        },
+        {
+          "heading": "Performance et fiabilité",
+          "body": "Le profilage a conduit à limiter les mises à jour et les rerenders du graphe, à déplacer du parsing vers des Web Workers et à regrouper certains flux WebSocket. Des tests Vitest, des régressions ciblées et des fixtures de contrat client/serveur protègent les invariants techniques."
+        }
+      ],
+      "media": [
+        {
+          "src": "/media/gpac-monitor-overview.png",
+          "alt": "GPAC Monitor : graphe des filtres et métriques de session",
+          "caption": "Vue en direct · graphe des filtres et détails de session",
+          "width": 1864,
+          "height": 665
+        },
+        {
+          "src": "/media/gpac-monitor-history.png",
+          "alt": "GPAC Monitor : session enregistrée avec timeline d’événements",
+          "caption": "Mode History · timeline et relecture d’une session",
+          "width": 1864,
+          "height": 994
+        }
+      ],
+      "links": [
+        {
+          "label": "Dépôt GPAC Monitor",
+          "href": "https://github.com/gpac/gpac_monitor"
+        },
+        {
+          "label": "Documentation du monitoring",
+          "href": "https://wiki.gpac.io/Howtos/remote-monitoring/"
+        }
+      ],
+      "visibility": "published"
+    },
+    {
+      "slug": "gpac",
+      "number": "02",
+      "title": "GPAC",
+      "subtitle": "Le moteur ouvert derrière des chaînes vidéo complexes.",
+      "category": "Infrastructure vidéo · Écosystème open source",
+      "period": "2024 — présent",
+      "status": "en cours",
+      "lead": "GPAC fournit les briques pour lire, transformer, inspecter, empaqueter et distribuer des flux multimédias. Mon travail relie ce moteur aux usages concrets : monitoring, documentation, tests et diagnostic de l’API.",
+      "role": "Intégration, diagnostic de l’API, contributions ciblées au dépôt et documentation ; GPAC est un projet collectif.",
+      "stack": [
+        "GPAC Filters",
+        "C",
+        "QuickJS",
+        "WebSocket RMT",
+        "MP4Box",
+        "MPEG-DASH",
+        "ISOBMFF"
+      ],
+      "metrics": [
+        {
+          "value": "2003",
+          "label": "projet open source",
+          "context": "Historique du projet GPAC, indépendant de mon travail."
+        },
+        {
+          "value": "2022",
+          "label": "intégration annoncée par Netflix",
+          "context": "Usage de GPAC pour des workflows de traitement et packaging vidéo, avec Motion Spell."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Pourquoi GPAC compte",
+          "body": "Une vidéo diffusée à grande échelle doit traverser des étapes de démultiplexage, transformation, encapsulation, packaging et livraison. GPAC rassemble ces opérations dans un moteur de filtres modulaire. L’application gpac orchestre des graphes de traitement ; MP4Box sert notamment à manipuler les fichiers MP4 et à préparer des contenus pour DASH, HLS et CMAF."
+        },
+        {
+          "heading": "Un outil employé au-delà de la recherche",
+          "body": "GPAC est né dans la recherche et reste développé avec une communauté ouverte. Son usage industriel est documenté : le site du projet cite les workflows vidéo de Netflix avec Motion Spell. L’annonce de 2022 concerne l’intégration de GPAC dans les opérations de contenu et de packaging de Netflix ; elle ne signifie pas que j’ai travaillé pour Netflix ni que GPAC constitue seul toute sa plateforme vidéo."
+        },
+        {
+          "heading": "Mon périmètre dans cet écosystème",
+          "body": "Mon apport principal est GPAC Monitor : une interface React et un backend QuickJS qui rendent les sessions de filtres observables en direct et en replay. Pour y parvenir, je travaille avec les callbacks FilterSession, les propriétés des PIDs, RMT et le code C du moteur. Je contribue aussi au wiki et aux outils de recherche de commandes."
+        },
+        {
+          "heading": "Contributions ciblées au moteur",
+          "body": "Dans le dépôt GPAC, une correction du serveur RMT WebSocket rétablit la taille correcte pour JS_GetArrayBuffer et le format du log associé. Un test de statut structuré pour le multiplexeur ISOM figure également dans l’historique. Ces contributions sont citées comme interventions ponctuelles, distinctes de la conception collective du moteur."
+        },
+        {
+          "heading": "Pourquoi le monitoring est nécessaire",
+          "body": "La souplesse des graphes de filtres rend possible des pipelines complexes et vivants, mais rend aussi leur diagnostic difficile. GPAC Monitor donne accès à la topologie, aux flux, aux métriques et à l’historique. Il transforme un moteur puissant en système observable pour les développeurs et les opérateurs."
+        }
+      ],
+      "media": [
+        {
+          "src": "/media/gpac-ecosystem.svg",
+          "alt": "Schéma éditorial des sources multimédias, du moteur de filtres GPAC, du packaging et du monitoring",
+          "caption": "Illustration éditoriale · moteur de filtres, packaging et observabilité",
+          "width": 1200,
+          "height": 620
+        }
+      ],
+      "links": [
+        {
+          "label": "Site officiel GPAC",
+          "href": "https://gpac.io/"
+        },
+        {
+          "label": "GPAC chez Netflix — Motion Spell",
+          "href": "https://www.motionspell.com/2023/08/28/unlock-cloud-streaming-potential-gpac-customization/"
+        },
+        {
+          "label": "Code source GPAC",
+          "href": "https://github.com/gpac/gpac"
+        },
+        {
+          "label": "Correction RMT WebSocket",
+          "href": "https://github.com/gpac/gpac/commit/7cdec24ed"
+        },
+        {
+          "label": "Test mux ISOM",
+          "href": "https://github.com/gpac/gpac/commit/617ce0915"
+        }
+      ],
+      "visibility": "published"
+    },
+    {
+      "slug": "wiki-gpac",
+      "number": "03",
+      "title": "Wiki GPAC",
+      "subtitle": "Lexique interactif, parcours de lecture et documentation vidéo.",
+      "category": "Documentation & expérience développeur · GPAC Wiki",
+      "period": "2024 — présent",
+      "status": "livré",
+      "lead": "Depuis 2024, j’ai modernisé l’expérience du wiki GPAC : découverte par les mots-clés, lecture adaptée au niveau, navigation et feedback ; puis j’ai enrichi les tutoriels d’API et les guides de monitoring.",
+      "role": "Conception d’interactions de lecture, lexique, navigation, documentation technique et exemples multi-langages.",
+      "stack": [
+        "Markdown",
+        "MkDocs",
+        "JavaScript",
+        "Python",
+        "GPAC CLI",
+        "FilterSession",
+        "RMT"
+      ],
+      "metrics": [
+        {
+          "value": "2024–26",
+          "label": "contributions suivies",
+          "context": "Historique Git local sous le nom PierreDillard ; plusieurs branches restent en chantier."
+        },
+        {
+          "value": "3",
+          "label": "étapes du parcours",
+          "context": "Découvrir une notion, utiliser l’API et diagnostiquer une session."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Un lexique qui accompagne la lecture",
+          "body": "Depuis 2024, j’ai travaillé sur les mots-clés contextuels, leurs définitions, les alias, les modales et les liens vers les pages de tags ou de glossaire. Le lecteur peut découvrir une notion au moment où il la rencontre, puis approfondir sans perdre sa page. Les premiers prototypes et l’outil d’extraction de termes restent dans mon fork ; des évolutions des modales et des liens ont été intégrées au wiki officiel."
+        },
+        {
+          "heading": "Une documentation à plusieurs profondeurs",
+          "body": "J’ai participé au système de lecture débutant/expert : sections balisées dans le Markdown, table des matières adaptée au niveau choisi, nuage de mots-clés cohérent avec ce niveau et documentation de ces règles pour les auteurs. Les sections repliables et la navigation permettent de garder lisibles des pages techniques très denses."
+        },
+        {
+          "heading": "Une interface de wiki modernisée",
+          "body": "Le travail touche aussi les menus, la table des matières, le responsive, les styles clair/sombre, les blocs de code, les pages 404 et le composant de feedback. Des corrections ciblées règlent les liens cassés, les problèmes d’affichage des modales et le débordement des tableaux de propriétés."
+        },
+        {
+          "heading": "Des exemples FilterSession utilisables",
+          "body": "En 2025, j’ai enrichi le tutoriel d’introduction avec des exemples JavaScript/NodeJS et Python, puis corrigé l’import, la création de session, la syntaxe et la gestion des erreurs. Ces interventions portent sur des exemples précis, pas sur l’ensemble de l’API GPAC."
+        },
+        {
+          "heading": "Relier le wiki au monitoring réel",
+          "body": "En 2026, le guide de monitoring distant explique -rmt et -rmt-log, la connexion à monitor.gpac.io, le graphe de filtres, les PIDs, les métriques, les logs et l’inspection d’un enregistrement. Les exemples de lecture et d’encodage/packaging DASH sont accompagnés de captures du produit."
+        },
+        {
+          "heading": "Un périmètre publié et des pistes en cours",
+          "body": "Le guide de monitoring, les améliorations de l’interface du wiki et les corrections du tutoriel figurent dans la branche principale locale de gpac/wiki. L’outil de lexique, le sélecteur de recherche native/Algolia et un guide de première session Monitor restent sur des branches dédiées dans le clone examiné. L’article détaille cette frontière et l’inventaire local conserve les commits."
+        }
+      ],
+      "media": [
+        {
+          "src": "/media/gpac-wiki-lexicon.svg",
+          "alt": "Schéma éditorial du lexique interactif du wiki GPAC",
+          "caption": "Schéma éditorial · mot-clé, définition, alias et pages de tags",
+          "width": 1200,
+          "height": 600
+        },
+        {
+          "src": "/media/gpac-wiki-monitoring.png",
+          "alt": "Capture intégrée au guide GPAC montrant le graphe de monitoring d’une lecture vidéo",
+          "caption": "Guide GPAC · monitoring distant d’une session de lecture",
+          "width": 1203,
+          "height": 439
+        }
+      ],
+      "links": [
+        {
+          "label": "Article sur mes contributions",
+          "href": "/journal/contribuer-au-wiki-gpac"
+        },
+        {
+          "label": "Lexique et tags publics",
+          "href": "https://wiki.gpac.io/tags/"
+        },
+        {
+          "label": "Guide de monitoring publié",
+          "href": "https://wiki.gpac.io/Howtos/remote-monitoring/"
+        },
+        {
+          "label": "Tutoriel FilterSession",
+          "href": "https://wiki.gpac.io/Developers/tutorials/filter-session-intro/"
+        },
+        {
+          "label": "Code du wiki GPAC",
+          "href": "https://github.com/gpac/wiki"
+        }
+      ],
+      "visibility": "published"
+    },
+    {
+      "slug": "outils-gpac",
+      "number": "04",
+      "title": "Outils d’agent GPAC",
+      "subtitle": "Répondre avec une commande traçable et un niveau de preuve explicite.",
+      "category": "Outillage développeur · Recherche appliquée",
+      "period": "2026 — présent",
+      "status": "recherche",
+      "lead": "Un ensemble de skills spécialisés et un corpus de commandes pour aider à explorer GPAC sans confondre exemple historique, syntaxe plausible et recette réellement validée.",
+      "role": "Conception du workflow, extraction du corpus, recherche, validation et documentation des limites.",
+      "stack": [
+        "Python",
+        "GPAC",
+        "Testsuite",
+        "Skills d’agent",
+        "Recherche locale"
+      ],
+      "metrics": [
+        {
+          "value": "8",
+          "label": "recettes validées",
+          "context": "Le dépôt du corpus distingue ces recettes des entrées historiques."
+        },
+        {
+          "value": "936",
+          "label": "modèles statiques",
+          "context": "Extraction partielle de la testsuite, sans validation d’exécution déduite."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Des spécialistes autour du moteur vidéo",
+          "body": "Dans le workflow GPAC Monitor, des skills distincts orientent la recherche de commandes, la vérification de l’aide du binaire, le diagnostic, la navigation dans le code source, les sessions API et le monitoring RMT. Leur rôle est de guider une enquête technique, avec les bons outils et les bonnes limites."
+        },
+        {
+          "heading": "Une provenance conservée, de l’export à la réponse",
+          "body": "Le corpus conserve le XML initial, les commandes dans leur ordre, les doublons et des identifiants de provenance. Il sépare les observations de l’export des recettes contrôlées. Une recherche peut donc retrouver un exemple utile tout en signalant qu’il reste à vérifier."
+        },
+        {
+          "heading": "Recettes validées et recherche exploratoire",
+          "body": "Huit recettes sont documentées comme validées, notamment autour de DASH, AVC, AAC-SBR et AV1 alpha. L’extraction de 936 modèles textuels de la testsuite élargit l’exploration, mais sa couverture est partielle : aucun de ces modèles ne devient automatiquement une recette exécutable."
+        },
+        {
+          "heading": "État actuel",
+          "body": "Une preuve locale de skill portable et un chemin de recherche rapide existent. L’évaluation, la mise à jour et la distribution restent à faire. Je présente ce travail comme une recherche d’outillage, pas comme un assistant GPAC déployé en production."
+        }
+      ],
+      "media": [
+        {
+          "src": "/media/gpac-skill-flow.svg",
+          "alt": "Schéma du chemin entre question, sources GPAC, validation et réponse documentée",
+          "caption": "Méthode · question → sources → validation → réponse traçable",
+          "width": 1200,
+          "height": 620
+        }
+      ],
+      "links": [
+        {
+          "label": "GPAC Monitor et ses skills",
+          "href": "https://github.com/gpac/gpac_monitor/tree/master/.claude/skills"
+        },
+        {
+          "label": "Source GPAC",
+          "href": "https://github.com/gpac/gpac"
+        }
+      ],
+      "visibility": "published"
+    }
+  ],
+  "notes": [
+    {
+      "slug": "contribuer-au-wiki-gpac",
+      "title": "Moderniser le wiki GPAC depuis 2024",
+      "date": "2026-10-07",
+      "intro": "Lexique interactif, niveaux de lecture, navigation, exemples d’API et guides de monitoring : j’ai travaillé à rendre GPAC plus accessible sans perdre sa profondeur technique.",
+      "heroImage": {
+        "src": "/media/gpac-wiki-lexicon.svg",
+        "alt": "Schéma éditorial du parcours entre mot-clé, définition, alias et pages de tags dans le wiki GPAC",
+        "caption": "Schéma éditorial du lexique interactif · fondé sur le code du wiki, pas une capture du site.",
+        "width": 1200,
+        "height": 600
+      },
+      "sections": [
+        {
+          "heading": "2024 — rendre le wiki plus facile à parcourir",
+          "body": "Mes premières contributions ont porté sur la structure de lecture : sections repliables, table des matières, navigation latérale, présentation des blocs de code, modes clair et sombre, et ajustements pour les écrans plus étroits. Le travail ne consistait pas seulement à réécrire des pages : il fallait que la documentation reste utilisable quand elle couvre des centaines de filtres et d’options."
+        },
+        {
+          "heading": "Un lexique interactif dans le parcours de lecture",
+          "body": "J’ai développé un nuage de mots-clés lié à la page consultée et des définitions ouvrables sans perdre le fil de lecture. Les modales affichent une explication, des alias, des liens vers les termes associés et, lorsqu’elle existe, une page de glossaire. Le catalogue de mots-clés porte les descriptions, catégories et liens ; les interactions ont été ajustées pour le survol, la fermeture et les différentes largeurs d’écran. Les premiers prototypes sont dans les branches de mon fork ; des évolutions des modales et des liens figurent aussi dans la branche principale du wiki."
+        },
+        {
+          "heading": "Des niveaux débutant et expert",
+          "body": "Pour ne pas imposer la même densité à tous, j’ai travaillé sur le balisage des sections Markdown avec data-level, le changement de niveau de lecture et la table des matières qui suit les sections visibles. Le choix peut être conservé dans le navigateur. J’ai documenté les règles de balisage, le comportement du nuage de mots-clés et les effets du mode débutant/expert afin que les auteurs puissent préparer un parcours cohérent."
+        },
+        {
+          "heading": "Retrouver un sujet par les tags et les liens",
+          "body": "Les mots-clés servent aussi de points d’entrée : pages de tags, catégories, liens depuis les définitions et renvois entre notions et pages techniques. J’ai corrigé des URL et des liens de glossaire pour que le lecteur puisse réellement passer d’un terme comme codec ou bitrate à une explication puis aux usages associés. Une expérimentation ultérieure permet de choisir entre recherche native et Algolia ; ce sélecteur reste sur une branche dédiée dans le clone examiné."
+        },
+        {
+          "heading": "Une interface de documentation plus fiable",
+          "body": "La modernisation a touché des détails très concrets : comportement des menus et de la table des matières, affichage des modales, erreurs de chargement des définitions, pages 404, styles responsive, débordement des tableaux de propriétés et rendu de blocs Markdown. J’ai aussi restructuré du JavaScript, des feuilles de style et des hooks MkDocs pour rendre ces interactions plus cohérentes. Plusieurs correctifs sont présents dans la branche principale du wiki."
+        },
+        {
+          "heading": "Donner une place au retour des lecteurs",
+          "body": "J’ai travaillé sur le composant de feedback intégré à la lecture, ses styles et son comportement avec la navigation latérale. L’idée est simple : une documentation technique progresse quand le lecteur peut signaler une difficulté au moment où il la rencontre, sans perdre sa position dans la page."
+        },
+        {
+          "heading": "Explorer un outil de lexique, sans confondre prototype et livraison",
+          "body": "En parallèle, mon fork conserve un outil de repérage et d’extraction de termes, avec traitement du contenu et tests. Il sert à explorer comment enrichir le vocabulaire du wiki plus systématiquement. Ce travail de recherche n’est pas assimilé ici à une fonctionnalité publiée : les commits concernés ne figurent pas dans upstream/master du clone local."
+        },
+        {
+          "heading": "2025 — relier le wiki à l’API GPAC",
+          "body": "J’ai ensuite enrichi le tutoriel FilterSession avec des exemples JavaScript/NodeJS et Python, puis corrigé l’import du module gpac, la création de session, la syntaxe et la gestion des erreurs. Ces contributions intégrées aident à passer de la découverte d’un concept à un premier programme. Elles ne représentent pas la totalité du tutoriel ni la conception de l’API GPAC."
+        },
+        {
+          "heading": "2026 — documenter le monitoring à partir du produit",
+          "body": "Le guide de monitoring distant relie les options -rmt et -rmt-log à des scénarios réels : ouvrir monitor.gpac.io, lire le graphe des filtres et les PIDs, observer les métriques et les logs, puis inspecter un enregistrement. J’ai ajouté des exemples de lecture et d’encodage/packaging DASH ainsi que des captures du produit. Un guide plus détaillé de première session Monitor reste en chantier sur une autre branche."
+        },
+        {
+          "heading": "Une modernisation suivie dans le temps",
+          "body": "Le lexique, la navigation, les niveaux de lecture, les exemples API et le monitoring répondent à un même besoin : réduire la distance entre une notion, une commande et le comportement d’un pipeline vidéo. L’inventaire des commits du clone local conserve le détail des contributions, en distinguant les changements intégrés au wiki officiel des recherches encore présentes dans mon fork."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Page publique des tags · wiki GPAC",
+          "href": "https://wiki.gpac.io/tags/"
+        },
+        {
+          "label": "Guide de monitoring publié · wiki GPAC",
+          "href": "https://wiki.gpac.io/Howtos/remote-monitoring/"
+        },
+        {
+          "label": "Tutoriel FilterSession · wiki GPAC",
+          "href": "https://wiki.gpac.io/Developers/tutorials/filter-session-intro/"
+        },
+        {
+          "label": "Commit : tutoriel Python et JavaScript",
+          "href": "https://github.com/gpac/wiki/commit/67488f2d"
+        },
+        {
+          "label": "Commit : guide de monitoring distant",
+          "href": "https://github.com/gpac/wiki/commit/0cda62c9"
+        },
+        {
+          "label": "Commit : documentation des niveaux de lecture",
+          "href": "https://github.com/gpac/wiki/commit/537e2abe"
+        },
+        {
+          "label": "Commit : modales et affichage dynamique des mots-clés",
+          "href": "https://github.com/gpac/wiki/commit/79936382"
+        },
+        {
+          "label": "Commit : alias et liens du glossaire",
+          "href": "https://github.com/gpac/wiki/commit/2412643f"
+        },
+        {
+          "label": "Commit : expérience de lecture et retour utilisateur",
+          "href": "https://github.com/gpac/wiki/commit/7de5eca6"
+        },
+        {
+          "label": "Prototype du nuage de mots-clés",
+          "href": "https://github.com/PierreDillard/wiki/commit/ee2ba812"
+        },
+        {
+          "label": "Branche de recherche : outil de lexique",
+          "href": "https://github.com/PierreDillard/wiki/commit/00d376e8"
+        },
+        {
+          "label": "Branche de recherche : sélecteur de recherche",
+          "href": "https://github.com/PierreDillard/wiki/commit/d9dc693c"
+        },
+        {
+          "label": "Guide de première session en chantier",
+          "href": "https://github.com/PierreDillard/wiki/commit/14a62aab"
+        }
+      ],
+      "visibility": "published"
+    },
+    {
+      "slug": "monitorer-et-rejouer-une-session-gpac",
+      "title": "Observer une session GPAC, puis la rejouer",
+      "date": "2026-10-07",
+      "intro": "Le direct aide à repérer un problème. Une session enregistrée permet de revenir au moment où le graphe, les flux ou les métriques ont changé.",
+      "sections": [
+        {
+          "heading": "Démarrer avec le direct",
+          "body": "L’option -rmt expose une session GPAC à l’interface de monitoring par WebSocket. Le graphe, les filtres, les PIDs, les logs et les métriques deviennent visibles pendant l’exécution. Le guide publié du wiki part d’un exemple de lecture avant de passer à l’encodage et au packaging DASH."
+        },
+        {
+          "heading": "Conserver ce qui s’est passé",
+          "body": "Avec -rmt-log, les données de monitoring sont enregistrées pour une consultation hors ligne. Cela permet de revenir sur une séquence difficile à reproduire, sans dépendre de la présence du problème au moment où l’on ouvre l’interface."
+        },
+        {
+          "heading": "Reconstruire un état lisible",
+          "body": "Dans GPAC Monitor, le replay utilise des checkpoints et les événements qui suivent pour reconstruire l’état affiché à un instant demandé. Le direct et l’historique empruntent le même pipeline d’actions côté interface ; le diagnostic reste cohérent entre les deux modes."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Guide GPAC : monitoring distant",
+          "href": "https://wiki.gpac.io/Howtos/remote-monitoring/"
+        },
+        {
+          "label": "Code de GPAC Monitor",
+          "href": "https://github.com/gpac/gpac_monitor"
+        }
+      ],
+      "visibility": "published"
+    }
+  ]
+}

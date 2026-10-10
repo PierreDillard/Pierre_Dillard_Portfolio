@@ -1,0 +1,9 @@
+component	class	dependencies	purpose
+branch-router	project-template	-	Module-managed component
+project-workflow	project-template	-	Module-managed component
+workflow-doctor	project-template	-	Module-managed component
+memory-report	project-template	-	Module-managed component
+ants	project-template	-	Module-managed component
+write-task	project-template	-	Module-managed component
+project-handoff	project-template	-	Module-managed component
+context-relay	project-template	-	Module-managed component

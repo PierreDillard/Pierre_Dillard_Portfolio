@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171716">
+  <meta name="description" content="Portfolio de Pierre Dillard, développeur full-stack spécialisé dans les interfaces temps réel, le multimédia et l'outillage IA.">
+  <title>Pierre Dillard — Portfolio 2026</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Pierre Dillard, retour en haut">PD<span class="brand-dot">.</span></a>
+    <nav aria-label="Navigation principale">
+      <a href="#projets">Projets</a>
+      <a href="#recherche">Recherche</a>
+      <a href="#parcours">Parcours</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="header-cv" href="assets/CV_Pierre_Dillard_2026.pdf" download>Mon CV <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-texture" aria-hidden="true"></div>
+      <div class="hero-inner wrap">
+        <div class="hero-topline"><span>PORTFOLIO / 2026</span><span>INGÉNIERIE · DESIGN D’INTERFACES</span></div>
+        <div class="hero-main">
+          <div class="hero-copy">
+            <p class="eyebrow light">Pierre Dillard · Développeur full-stack</p>
+            <h1 id="hero-title">Rendre les systèmes <em>complexes</em> lisibles.</h1>
+            <p class="hero-lead">Je conçois des interfaces temps réel pour comprendre, explorer et diagnostiquer les systèmes multimédias — et des outils pour mieux travailler avec les agents de code.</p>
+            <div class="hero-actions">
+              <a class="button button-light" href="#projets">Explorer mes travaux <span aria-hidden="true">↘</span></a>
+              <a class="text-link light-link" href="assets/CV_Pierre_Dillard_2026.pdf" download>Télécharger mon CV <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="hero-portrait"><img src="assets/pierre.jpg" alt="Portrait de Pierre Dillard" fetchpriority="high"><span class="portrait-caption">PIERRE DILLARD / MARLY-LE-ROI</span></div>
+        </div>
+        <div class="hero-bottomline"><span>REACT · TYPESCRIPT · WEBSOCKET · GPAC</span><span>SCROLL TO EXPLORE ↓</span></div>
+      </div>
+    </section>
+
+    <section class="intro wrap section-space" aria-labelledby="intro-title">
+      <div class="section-marker"><span>01 / APPROCHE</span><span class="marker-line"></span></div>
+      <div class="intro-grid"><h2 id="intro-title">Du signal<br>au <i>sens.</i></h2><div><p class="intro-statement">Une interface technique réussie donne une forme claire aux données, aux événements et aux décisions.</p><p>Chez Télécom Paris, je développe GPAC Monitor : un espace de travail pour observer les pipelines multimédias en direct et rejouer les sessions. En parallèle, je construis des workflows de développement assisté par IA, centrés sur la traçabilité et la qualité.</p><a class="inline-arrow" href="#parcours">Découvrir mon parcours <span aria-hidden="true">↗</span></a></div></div>
+    </section>
+
+    <section class="projects section-space" id="projets" aria-labelledby="projects-title">
+      <div class="wrap">
+        <div class="section-marker"><span>02 / PROJETS SÉLECTIONNÉS</span><span class="marker-line"></span><span>2024 — AUJOURD’HUI</span></div>
+        <div class="section-heading"><h2 id="projects-title">Travaux <i>choisis.</i></h2><p>Trois projets, trois façons de rendre des systèmes utiles et compréhensibles.</p></div>
+        <article class="project project-featured">
+          <figure class="monitor-figure">
+            <a href="assets/gpac-monitor-overview.png" target="_blank" rel="noopener noreferrer" aria-label="Agrandir la capture de GPAC Monitor : graphe et métriques">
+              <img src="assets/gpac-monitor-overview.png" alt="Capture réelle de GPAC Monitor : graphe des filtres à gauche, vue Overview et métriques de session à droite" width="1864" height="665" loading="lazy">
+            </a>
+            <figcaption>GPAC Monitor · graphe et métriques de session <span>Cliquer pour agrandir ↗</span></figcaption>
+          </figure>
+          <div class="project-info"><p class="project-number">01 / TÉLÉCOM PARIS · GPAC</p><h3>GPAC<br>Monitor<span class="period">.</span></h3><p class="project-description">Une application d’observabilité des pipelines multimédias : graphe interactif, logs, métriques et diagnostic en temps réel. Le mode History / Replay reconstruit l’état d’une session pour explorer les événements passés.</p><div class="project-facts"><div><b>851 → 105 ms</b><span>INP mesuré après optimisation</span></div><div><b>900+</b><span>tests automatisés cités dans le CV</span></div></div><div class="tags"><span>React</span><span>TypeScript</span><span>QuickJS</span><span>WebSocket</span><span>React Flow</span></div><a class="inline-arrow" href="https://github.com/gpac/gpac_monitor" target="_blank" rel="noopener noreferrer">Voir le dépôt <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <div class="project-pair">
+          <article class="project-card"><div class="project-art kit-art" role="img" aria-label="Illustration typographique du projet Agent Workflow Kit"><span class="art-label">02 / DEVELOPER TOOLING</span><div class="kit-lines"><span>task → context</span><span>context → action</span><span>action → evidence</span></div><div class="kit-symbol">{ <span>AWK</span> }</div></div><div class="card-body"><p class="project-number">02 / OPEN SOURCE · OUTILLAGE IA</p><h3>Agent Workflow Kit<span class="period">.</span></h3><p>Un kit modulaire pour organiser tâches, mémoire, continuité et qualité du travail avec Claude Code, Codex et Copilot.</p><div class="tags"><span>Bash</span><span>Node.js</span><span>Skills</span><span>CI</span></div><a class="inline-arrow" href="https://github.com/PierreDillard/agent-workflow-kit" target="_blank" rel="noopener noreferrer">Voir le dépôt <span aria-hidden="true">↗</span></a></div></article>
+          <article class="project-card"><div class="project-art epr-art" role="img" aria-label="Illustration graphique du projet web EPR"><span class="art-label">03 / APPLICATION WEB</span><div class="epr-symbol">EPR<span>.</span></div><div class="epr-lines"><i></i><i></i><i></i></div></div><div class="card-body"><p class="project-number">03 / PROJET WEB · 2024</p><h3>EPR<span class="period">.</span></h3><p>Une application Next.js construite de bout en bout : pages dynamiques, API Routes, authentification, administration et formulaires.</p><div class="tags"><span>Next.js</span><span>React</span><span>API Routes</span></div><a class="inline-arrow" href="https://github.com/PierreDillard" target="_blank" rel="noopener noreferrer">Explorer mon GitHub <span aria-hidden="true">↗</span></a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="research section-space" id="recherche" aria-labelledby="research-title"><div class="wrap"><div class="section-marker"><span>03 / RECHERCHE & EXPLORATION</span><span class="marker-line"></span></div><div class="section-heading"><h2 id="research-title">Au-delà de<br>l’<i>interface.</i></h2><p>Des travaux de diagnostic et de méthode qui nourrissent mes produits.</p></div><div class="research-list"><article><span class="research-index">01</span><div><p class="research-type">SYSTÈMES MULTIMÉDIAS</p><h3>Comprendre GPAC au niveau du runtime</h3><p>Lecture du code C, analyse des propriétés PID et des bindings QuickJS pour relier le comportement observé à sa cause. Diagnostic d’un crash lié à l’envoi WebSocket binaire et proposition d’un correctif minimal.</p></div><span class="research-glyph" aria-hidden="true">↗</span></article><article><span class="research-index">02</span><div><p class="research-type">DÉBOGAGE TEMPOREL</p><h3>Reconstituer une session passée</h3><p>Conception du système History / Replay : checkpoints, événements et reconstruction de l’état dérivé pour naviguer dans de longues sessions sans perdre le contexte.</p></div><span class="research-glyph" aria-hidden="true">↗</span></article><article><span class="research-index">03</span><div><p class="research-type">IA & OUTILLAGE DÉVELOPPEUR</p><h3>Réduire le coût du contexte</h3><p>Exploration des workflows agentiques, des skills et d’un corpus local de commandes GPAC, avec mesure de la latence et du coût en tokens avant de faire évoluer la méthode.</p></div><span class="research-glyph" aria-hidden="true">↗</span></article></div><figure class="history-figure"><a href="assets/gpac-monitor-history.png" target="_blank" rel="noopener noreferrer" aria-label="Agrandir la capture du mode History et Replay"><img src="assets/gpac-monitor-history.png" alt="Capture réelle de GPAC Monitor en mode History : graphe, widgets de session et timeline d'événements" width="1864" height="994" loading="lazy"></a><figcaption><span>GPAC Monitor · exploration d’une session enregistrée</span><span>Voir la capture en grand ↗</span></figcaption></figure></div></section>
+
+    <section class="about section-space" id="parcours" aria-labelledby="about-title"><div class="wrap"><div class="section-marker"><span>04 / PARCOURS</span><span class="marker-line"></span></div><div class="about-grid"><div><h2 id="about-title">Construire.<br>Mesurer.<br><i>Expliquer.</i></h2><p class="about-side">Développeur full-stack basé à Marly-le-Roi, je travaille à la rencontre des interfaces, des systèmes multimédias et des outils de développement.</p><a class="button button-dark" href="assets/CV_Pierre_Dillard_2026.pdf" download>Télécharger mon CV <span aria-hidden="true">↗</span></a></div><div class="timeline"><div><span>2024 — PRÉSENT</span><h3>Télécom Paris / GPAC</h3><p>Développement de GPAC Monitor, monitoring temps réel et outils de diagnostic multimédia.</p></div><div><span>2024</span><h3>EPR</h3><p>Développement full-stack d’une application Next.js.</p></div><div><span>2023</span><h3>École O’clock</h3><p>Titre professionnel Développeur Web et Web Mobile, spécialisation React · mention Très Bien.</p></div><div><span>EN CONTINU</span><h3>Open source & apprentissage</h3><p>Agent Workflow Kit, documentation GPAC et exploration des workflows IA.</p></div></div></div><div class="skill-band"><span>REACT</span><span>TYPESCRIPT</span><span>QUICKJS</span><span>GPAC</span><span>WEBSOCKET</span><span>VITEST</span></div></div></section>
+
+    <section class="contact section-space" id="contact" aria-labelledby="contact-title"><div class="wrap"><div class="section-marker"><span>05 / CONTACT</span><span class="marker-line"></span><span>PARLONS PROJET</span></div><p class="eyebrow light">UNE QUESTION, UNE COLLABORATION, UNE IDÉE ?</p><h2 id="contact-title">Créons quelque chose<br>de <i>clair.</i></h2><a class="contact-email" href="mailto:pierredillard@gmail.com">pierredillard@gmail.com <span aria-hidden="true">↗</span></a><div class="contact-links"><a href="https://github.com/PierreDillard" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="assets/CV_Pierre_Dillard_2026.pdf" download>CV PDF ↗</a></div></div></section>
+  </main>
+  <footer><div class="wrap"><span>© <span id="year">2026</span> Pierre Dillard</span><span>Portfolio · Développé avec soin</span><a href="#top">Retour en haut ↑</a></div></footer>
+</body>
+</html>

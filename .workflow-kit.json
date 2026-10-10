@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0-dev",
+  "configuration": {
+    "projectName": "Portfolio Pierre Dillard",
+    "tasksDirectory": "tasks",
+    "reportTimezone": "Europe/Paris",
+    "userRoot": "/tmp/portfolio-dillard-kit-review/user-root",
+    "installGlobalSkills": false,
+    "requirePrecommit": false,
+    "defaultBranch": "master",
+    "branchStrategy": "flat",
+    "featureBranchPrefix": "dev/"
+  },
+  "selected": [
+    "tasks",
+    "memory",
+    "continuity"
+  ],
+  "modules": [
+    {
+      "id": "memory",
+      "version": "1.0.0",
+      "requires": {},
+      "rules": [
+        {
+          "id": "main",
+          "path": ".workflow/modules/memory/rules/main.md",
+          "point": "session-start",
+          "when": []
+        }
+      ],
+      "hooks": [],
+      "checks": [
+        {
+          "path": "tasks/PROJECT_MEMORY.md",
+          "type": "file",
+          "maxBytes": 8192
+        },
+        {
+          "path": "tasks/DECISIONS.md",
+          "type": "file",
+          "maxBytes": 32768
+        }
+      ],
+      "components": [
+        {
+          "name": "memory-report",
+          "class": "project-template"
+        }
+      ],
+      "settings": {},
+      "fingerprint": "28203b70936f3faa081e048218826527b50105032cd81810fa37ee43c6594833"
+    },
+    {
+      "id": "tasks",
+      "version": "1.0.0",
+      "requires": {},
+      "rules": [
+        {
+          "id": "main",
+          "path": ".workflow/modules/tasks/rules/main.md",
+          "point": "task-validation",
+          "when": []
+        }
+      ],
+      "hooks": [],
+      "checks": [],
+      "components": [
+        {
+          "name": "ants",
+          "class": "project-template"
+        },
+        {
+          "name": "write-task",
+          "class": "project-template"
+        }
+      ],
+      "settings": {},
+      "fingerprint": "00c608a72a929cee253b183aae2e8694db254c499fe1ca74d104ce5341f4588c"
+    },
+    {
+      "id": "continuity",
+      "version": "1.0.0",
+      "requires": {
+        "tasks": "*",
+        "memory": "*"
+      },
+      "rules": [
+        {
+          "id": "main",
+          "path": ".workflow/modules/continuity/rules/main.md",
+          "point": "session-start",
+          "when": []
+        }
+      ],
+      "hooks": [],
+      "checks": [],
+      "components": [
+        {
+          "name": "project-handoff",
+          "class": "project-template"
+        },
+        {
+          "name": "context-relay",
+          "class": "project-template"
+        }
+      ],
+      "settings": {},
+      "fingerprint": "c374b1dacebd1355400c59f0abbf05d4c3bda7f57be98b2276898461c4f32cb6"
+    }
+  ],
+  "files": [
+    {
+      "root": "project",
+      "path": ".claude/skills/memory-report/SKILL.md",
+      "mode": 436,
+      "owner": "memory",
+      "editable": false,
+      "sha256": "4065be3e645e80f8bf1320503aac1daf022b1d1c92b2179a2ec93e81d2b8fdb5"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/memory-report/SKILL.md",
+      "mode": 436,
+      "owner": "memory",
+      "editable": false,
+      "sha256": "4065be3e645e80f8bf1320503aac1daf022b1d1c92b2179a2ec93e81d2b8fdb5"
+    },
+    {
+      "root": "project",
+      "path": "tasks/PROJECT_MEMORY.md",
+      "mode": 436,
+      "owner": "memory",
+      "editable": true,
+      "sha256": "3df2c1cf09b374e5e193ea7c8ac4014bf65235fd2d20a372f4cf34a63f33c754"
+    },
+    {
+      "root": "project",
+      "path": "tasks/DECISIONS.md",
+      "mode": 436,
+      "owner": "memory",
+      "editable": true,
+      "sha256": "9f7424b6dbd24edada90797514fcfa4b11bd33b982b6fca345567a619a420ce3"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/modules/memory/rules/main.md",
+      "mode": 420,
+      "owner": "memory",
+      "editable": false,
+      "sha256": "e9fb563f7f3a1898cab2f2a65f70c2cac45e579f68893a9ee73d735dad7c9473"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/ants/SKILL.md",
+      "mode": 436,
+      "owner": "tasks",
+      "editable": false,
+      "sha256": "010d3c277eed13e7cc8be46a062c754d45f35d7d9b705eecf1f80540eecce219"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/ants/SKILL.md",
+      "mode": 436,
+      "owner": "tasks",
+      "editable": false,
+      "sha256": "010d3c277eed13e7cc8be46a062c754d45f35d7d9b705eecf1f80540eecce219"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/write-task/SKILL.md",
+      "mode": 436,
+      "owner": "tasks",
+      "editable": false,
+      "sha256": "e4e6c654143b3f05449e5a59d054ac1ad02a26c6157b39db01f670ea201c2b22"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/write-task/SKILL.md",
+      "mode": 436,
+      "owner": "tasks",
+      "editable": false,
+      "sha256": "e4e6c654143b3f05449e5a59d054ac1ad02a26c6157b39db01f670ea201c2b22"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/modules/tasks/rules/main.md",
+      "mode": 420,
+      "owner": "tasks",
+      "editable": false,
+      "sha256": "c2b33593d9e1507cda07956e7f7b5833d16a5cad323834cf3889a7653d8ef856"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/project-handoff/SKILL.md",
+      "mode": 436,
+      "owner": "continuity",
+      "editable": false,
+      "sha256": "8b9fbf2cdb30e1b6630b8caba233959eb5abe734da2744c48091603a80bf6bae"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/project-handoff/SKILL.md",
+      "mode": 436,
+      "owner": "continuity",
+      "editable": false,
+      "sha256": "8b9fbf2cdb30e1b6630b8caba233959eb5abe734da2744c48091603a80bf6bae"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/context-relay/SKILL.md",
+      "mode": 436,
+      "owner": "continuity",
+      "editable": false,
+      "sha256": "a00bfdbcb775e755701a3cd472770561192d486dd281cb60665512a8a88c3425"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/context-relay/SKILL.md",
+      "mode": 436,
+      "owner": "continuity",
+      "editable": false,
+      "sha256": "a00bfdbcb775e755701a3cd472770561192d486dd281cb60665512a8a88c3425"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/modules/continuity/rules/main.md",
+      "mode": 420,
+      "owner": "continuity",
+      "editable": false,
+      "sha256": "0dfaa3a5f2e29aad141a6d011390cf2b03009a0f0292f5f3ccfe6e38c89736c7"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/branch-router/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "4147165604540b71d26fd793d869b622dca3fde37bd39dccf59ac3bd320aeda4"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/branch-router/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "4147165604540b71d26fd793d869b622dca3fde37bd39dccf59ac3bd320aeda4"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/project-workflow/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "11a762370bfc6b9bc0b28b523c4fb0f8b60e942ec1b1aa180bd14690e3d2dc6e"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/project-workflow/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "11a762370bfc6b9bc0b28b523c4fb0f8b60e942ec1b1aa180bd14690e3d2dc6e"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/workflow-doctor/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "ee99813cad1f5638dd24ccaee241f0a8aa2620d9acf02271ae183672fbe3ebba"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/workflow-doctor/SKILL.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "ee99813cad1f5638dd24ccaee241f0a8aa2620d9acf02271ae183672fbe3ebba"
+    },
+    {
+      "root": "project",
+      "path": ".claude/scripts/sync-skills.sh",
+      "mode": 509,
+      "owner": "core",
+      "editable": false,
+      "sha256": "10e372849244928dec1c062ca63a233396617a3bd7c5c0a4765f768724ff05a8"
+    },
+    {
+      "root": "project",
+      "path": ".claude/scripts/workflow-doctor.sh",
+      "mode": 509,
+      "owner": "core",
+      "editable": false,
+      "sha256": "2e76a1835a613a6fe0e284880ba477c8c278840cfbed5e6e49f4a6d2e5942f20"
+    },
+    {
+      "root": "project",
+      "path": ".claude/hooks/show-handoff.sh",
+      "mode": 509,
+      "owner": "core",
+      "editable": false,
+      "sha256": "faf91e508fc74b3f363172ffddb6b09a319853b2d628efef4b87674256ac5a30"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/catalog.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "a421d1536199185ef8592c4ccf192f0390ca5d82a820e321f34cac30fa6257f6"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/cli.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "77b39630812dc3b1677e6cf12c10065a3ca64dc08121d66c1286923565c87f7f"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/compose.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "36a3f8119a940d08bb3d1104f5f1eeab3d88efac7709c43c3adb4ab3ae7ee870"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/doctor.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "b73a3c9ca932e7c04b6425f1dc28551ffaed31c31a4fdf6f9a74646d1fde6c01"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/manage.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "bb7a0afe466e00586cf472e6d7d4750963490d40b51cec07f662d44055c5f3a2"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/paths.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "45907e5f20e294b89375f4d7c4d1295895c48c50386ee610d958328918f5ba38"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/transaction.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "a398d7cdc74d7dbff9ce644f3de49cd405f9d162935f265993124c0b60ba8ea3"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/base-rules.md",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "1e49d96665ae4e0b440f450c8925b12f40edde89ea0290349eab1c138fd2dda3"
+    },
+    {
+      "root": "project",
+      "path": ".claude/settings.json",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "8cc2d8bcfd39ec2f6720e2761ab025ad2f1f8aaad3350cc651c7e218729e9b58"
+    },
+    {
+      "root": "project",
+      "path": ".codex/hooks.json",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "1aac7e652a8fdc4ddb821b408d7b0dcaa486abf5397d3f1b9ff55eee1fd504d5"
+    },
+    {
+      "root": "project",
+      "path": ".workflow-kit.env",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "1c9d0c94e5fc22a937b1bac7fc02987aa01d6ead414fd9e8add311b89b5cd1e9"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/branch-policy.md",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "5573b09495c4db34ed0e3600f3b421c77ee3d0489edaacbd11bba1a3bb28659b"
+    },
+    {
+      "root": "project",
+      "path": "CLAUDE.md",
+      "mode": 420,
+      "owner": "core",
+      "editable": true,
+      "sha256": "7ef09cc4a6271cfa9cc227d91d96a894602f9ec89766e40e164e84216cf61cad"
+    },
+    {
+      "root": "project",
+      "path": "AGENTS.md",
+      "mode": 420,
+      "owner": "core",
+      "editable": true,
+      "sha256": "7ef09cc4a6271cfa9cc227d91d96a894602f9ec89766e40e164e84216cf61cad"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/PROJECT_RULES.md",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "5e786fd48fae5fc178d95c63b5f656db5ca763013ffb14c123fcd6a60b06ab0b"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/components.tsv",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "f38b0c76f86abcbfce6118de93621b192ce7837d697f58dc5d455fe7e7b78e65"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/update-source.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "bf5f02880e827d18e8a0abb9a4c8865ad46edcd6b21adc7faa337964ee0ff599"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/runtime/update.mjs",
+      "mode": 436,
+      "owner": "core",
+      "editable": false,
+      "sha256": "138342fc648667b76b1b7c093159828f6af8de3ba8b1b3b67dc8b3197e5f44bc"
+    }
+  ],
+  "source": {
+    "revision": "706be410661765c831095fae712e9404ce6a2384",
+    "dirty": false,
+    "fingerprint": "fa058649f18744d48fe0af0fd271ad3e438c4e499d59e70982bff59c23ae33ae"
+  }
+}

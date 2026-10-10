@@ -1,0 +1,87 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import type { SiteContent } from '@/content/site';
+import type { PortfolioProject } from '@/content/types';
+import type { JournalNote } from '@/content/notes';
+import { ProfileEditor } from './ProfileEditor';
+import { ProjectEditor } from './ProjectEditor';
+import { NoteEditor } from './NoteEditor';
+import { type UploadedAsset } from './MediaField';
+
+type Tab = 'profile' | 'projects' | 'notes' | 'media';
+
+function newProject(): PortfolioProject {
+  return { slug: `nouveau-projet-${Date.now()}`, number: '99', title: 'Nouveau projet', subtitle: 'Sous-titre à compléter', category: 'Catégorie à compléter', period: new Date().getFullYear().toString(), status: 'en cours', visibility: 'draft', lead: 'Résumé à compléter.', role: 'Rôle à compléter.', stack: [], metrics: [], sections: [], media: [], links: [] };
+}
+function newNote(): JournalNote {
+  return { slug: `nouvel-article-${Date.now()}`, title: 'Nouvel article', date: new Date().toISOString().slice(0, 10), intro: 'Introduction à compléter.', visibility: 'draft', sections: [], sources: [] };
+}
+
+export function AdminEditor() {
+  const [content, setContent] = useState<SiteContent | null>(null);
+  const [assets, setAssets] = useState<string[]>([]);
+  const [tab, setTab] = useState<Tab>('profile');
+  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedNote, setSelectedNote] = useState('');
+  const [dirty, setDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
+
+  async function load() {
+    const [contentResponse, mediaResponse] = await Promise.all([fetch('/api/admin/content', { cache: 'no-store' }), fetch('/api/admin/media', { cache: 'no-store' })]);
+    if (!contentResponse.ok || !mediaResponse.ok) throw new Error('L’éditeur est disponible uniquement avec npm run dev sur cet ordinateur.');
+    const nextContent = await contentResponse.json() as SiteContent;
+    const mediaFiles = await mediaResponse.json() as string[];
+    setContent(nextContent); setAssets(mediaFiles); setSelectedProject(nextContent.projects[0]?.slug || ''); setSelectedNote(nextContent.notes[0]?.slug || ''); setDirty(false);
+  }
+  useEffect(() => { void load().catch((error) => setMessage(error.message)); }, []);
+  function update(change: (draft: SiteContent) => void) {
+    setContent((previous) => { if (!previous) return previous; const draft = structuredClone(previous); change(draft); return draft; });
+    setDirty(true); setMessage('Modifications non enregistrées.');
+  }
+  async function upload(file: File): Promise<UploadedAsset> {
+    const form = new FormData(); form.append('file', file);
+    const response = await fetch('/api/admin/media', { method: 'POST', body: form });
+    const result = await response.json() as UploadedAsset & { error?: string };
+    if (!response.ok) throw new Error(result.error || 'Import impossible.');
+    setAssets((previous) => [...previous, result.src].sort());
+    setMessage('Média importé. Enregistre le contenu pour conserver sa sélection.');
+    return result;
+  }
+  async function save() {
+    if (!content) return;
+    setSaving(true); setMessage('Enregistrement…');
+    try {
+      const response = await fetch('/api/admin/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(content) });
+      const result = await response.json() as { ok?: boolean; error?: string; backup?: string };
+      if (!response.ok) throw new Error(result.error || 'Enregistrement impossible.');
+      setDirty(false); setMessage(`Enregistré. Sauvegarde précédente : ${result.backup}. Le site se recharge automatiquement en mode développement.`);
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Erreur inconnue.'); }
+    finally { setSaving(false); }
+  }
+  function move(type: 'projects' | 'notes', slug: string, direction: -1 | 1) {
+    update((draft) => {
+      const items = draft[type];
+      const currentIndex = items.findIndex((item) => item.slug === slug);
+      const targetIndex = currentIndex + direction;
+      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= items.length) return;
+      [items[currentIndex], items[targetIndex]] = [items[targetIndex], items[currentIndex]];
+    });
+  }
+  function exportContent() {
+    if (!content) return;
+    const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a'); anchor.href = url; anchor.download = `portfolio-pierre-${new Date().toISOString().slice(0, 10)}.json`; anchor.click(); URL.revokeObjectURL(url);
+  }
+  if (!content) return <main className="editor-loading">{message || 'Chargement de l’éditeur…'}</main>;
+  const project = content.projects.find((item) => item.slug === selectedProject) || content.projects[0];
+  const note = content.notes.find((item) => item.slug === selectedNote) || content.notes[0];
+  return <main className="editor-shell"><aside className="editor-sidebar"><a className="editor-brand" href="/">PD<span>.</span> <small>ÉDITEUR</small></a><p className="editor-sidebar-title">Portfolio de Pierre</p><nav aria-label="Sections de l’éditeur"><button className={tab === 'profile' ? 'active' : ''} onClick={() => setTab('profile')}>01 / Accueil & profil</button><button className={tab === 'projects' ? 'active' : ''} onClick={() => setTab('projects')}>02 / Projets <span>{content.projects.length}</span></button><button className={tab === 'notes' ? 'active' : ''} onClick={() => setTab('notes')}>03 / Articles <span>{content.notes.length}</span></button><button className={tab === 'media' ? 'active' : ''} onClick={() => setTab('media')}>04 / Médiathèque <span>{assets.length}</span></button></nav><div className="editor-sidebar-foot"><p>Édition locale. Les projets et articles « brouillon » restent cachés du site public.</p><a href="/" target="_blank" rel="noopener noreferrer">Ouvrir le portfolio ↗</a></div></aside><div className="editor-main"><header className="editor-topbar"><div><p className="editor-eyebrow">STUDIO / CONTENU</p><h1>{tab === 'profile' ? 'Accueil & profil' : tab === 'projects' ? 'Études de cas' : tab === 'notes' ? 'Journal' : 'Médiathèque'}</h1></div><div className="editor-top-actions"><button type="button" className="editor-quiet-button" onClick={exportContent}>Exporter JSON</button><button type="button" className="editor-save-button" disabled={!dirty || saving} onClick={() => void save()}>{saving ? 'Enregistrement…' : dirty ? 'Enregistrer les changements' : 'Enregistré ✓'}</button></div></header>{message && <p role="status" className={`editor-message ${dirty ? 'unsaved' : ''}`}>{message}</p>}
+    {tab === 'profile' && <ProfileEditor profile={content.profile} onChange={(profile) => update((draft) => { draft.profile = profile; })} assets={assets} onUpload={upload} />}
+    {tab === 'projects' && <><div className="editor-selection"><select aria-label="Projet à modifier" value={project?.slug || ''} onChange={(event) => setSelectedProject(event.target.value)}>{content.projects.map((item) => <option value={item.slug} key={item.slug}>{item.title} {item.visibility === 'draft' ? '· brouillon' : ''}</option>)}</select><button type="button" className="editor-minor-button" onClick={() => { const item = newProject(); update((draft) => { draft.projects.push(item); }); setSelectedProject(item.slug); }}>+ Nouveau projet</button></div>{project && <><div className="editor-preview-bar"><span>{project.visibility === 'draft' ? 'BROUILLON' : 'PUBLIÉ'}</span><strong>{project.title}</strong><button type="button" disabled={content.projects[0]?.slug === project.slug} onClick={() => move('projects', project.slug, -1)}>↑ Monter</button><button type="button" disabled={content.projects.at(-1)?.slug === project.slug} onClick={() => move('projects', project.slug, 1)}>↓ Descendre</button>{project.visibility !== 'draft' && <a href={`/projets/${project.slug}`} target="_blank" rel="noopener noreferrer">Voir la page ↗</a>}<button type="button" onClick={() => { if (window.confirm(`Retirer « ${project.title} » du portfolio ? Le fichier média reste conservé.`)) { update((draft) => { draft.projects = draft.projects.filter((item) => item.slug !== project.slug); }); setSelectedProject(content.projects.find((item) => item.slug !== project.slug)?.slug || ''); } }}>Retirer la fiche</button></div><ProjectEditor project={project} onChange={(next) => { update((draft) => { draft.projects = draft.projects.map((item) => item.slug === project.slug ? next : item); }); setSelectedProject(next.slug); }} assets={assets} onUpload={upload} /></>}</>}
+    {tab === 'notes' && <><div className="editor-selection"><select aria-label="Article à modifier" value={note?.slug || ''} onChange={(event) => setSelectedNote(event.target.value)}>{content.notes.map((item) => <option value={item.slug} key={item.slug}>{item.title} {item.visibility === 'draft' ? '· brouillon' : ''}</option>)}</select><button type="button" className="editor-minor-button" onClick={() => { const item = newNote(); update((draft) => { draft.notes.unshift(item); }); setSelectedNote(item.slug); }}>+ Nouvel article</button></div>{note && <><div className="editor-preview-bar"><span>{note.visibility === 'draft' ? 'BROUILLON' : 'PUBLIÉ'}</span><strong>{note.title}</strong><button type="button" disabled={content.notes[0]?.slug === note.slug} onClick={() => move('notes', note.slug, -1)}>↑ Monter</button><button type="button" disabled={content.notes.at(-1)?.slug === note.slug} onClick={() => move('notes', note.slug, 1)}>↓ Descendre</button>{note.visibility !== 'draft' && <a href={`/journal/${note.slug}`} target="_blank" rel="noopener noreferrer">Voir la page ↗</a>}<button type="button" onClick={() => { if (window.confirm(`Retirer l’article « ${note.title} » ?`)) { update((draft) => { draft.notes = draft.notes.filter((item) => item.slug !== note.slug); }); setSelectedNote(content.notes.find((item) => item.slug !== note.slug)?.slug || ''); } }}>Retirer l’article</button></div><NoteEditor note={note} onChange={(next) => { update((draft) => { draft.notes = draft.notes.map((item) => item.slug === note.slug ? next : item); }); setSelectedNote(next.slug); }} assets={assets} onUpload={upload} /></>}</>}
+    {tab === 'media' && <section className="editor-form"><div className="editor-group"><h2>Importer une capture, vidéo ou PDF</h2><p>Les nouveaux fichiers sont conservés dans <code>public/media/uploads/</code>. Choisis-les ensuite dans une fiche projet, un article ou le profil.</p><label className="editor-upload-button">+ Choisir un fichier<input type="file" accept="image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,application/pdf" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file).catch((error) => setMessage(error.message)); event.target.value = ''; }} /></label></div><div className="editor-group"><h2>Médias disponibles</h2><div className="editor-media-grid">{assets.map((asset) => <div className="editor-media-tile" key={asset}>{/\.(png|jpe?g|webp|avif|svg)$/i.test(asset) ? <img src={asset} alt="" /> : /\.(mp4|webm)$/i.test(asset) ? <video src={asset} preload="metadata" /> : <div className="editor-pdf-tile">PDF</div>}<code>{asset}</code><button type="button" onClick={() => void navigator.clipboard.writeText(asset).then(() => setMessage('Chemin du média copié.'))}>Copier le chemin</button></div>)}</div></div></section>}
+  </div></main>;
+}

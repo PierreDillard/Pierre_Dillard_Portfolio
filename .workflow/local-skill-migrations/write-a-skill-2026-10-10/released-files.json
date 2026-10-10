@@ -1,0 +1,66 @@
+[
+  {
+    "root": "project",
+    "path": ".claude/skills/write-a-skill/SKILL.md",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "4aa6a2038d1c0b00da255c69ac180c5c8edce1d29b04630c0cb7352d9d253c9b"
+  },
+  {
+    "root": "project",
+    "path": ".codex/skills/write-a-skill/SKILL.md",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "4aa6a2038d1c0b00da255c69ac180c5c8edce1d29b04630c0cb7352d9d253c9b"
+  },
+  {
+    "root": "project",
+    "path": ".claude/skills/write-a-skill/references/kit-approval.md",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "84378d2870384c6aa8527d93e9654b7d76aea8f691c888d102f3470aa55d38f2"
+  },
+  {
+    "root": "project",
+    "path": ".codex/skills/write-a-skill/references/kit-approval.md",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "84378d2870384c6aa8527d93e9654b7d76aea8f691c888d102f3470aa55d38f2"
+  },
+  {
+    "root": "project",
+    "path": ".workflow/runtime/external-skill-package.mjs",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "9440d69f8364b5bcbdec0241c1de2a43a1637e689be1035155dc1c2e68d55cda"
+  },
+  {
+    "root": "project",
+    "path": ".workflow/runtime/module-inspection.mjs",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "f5945dea1468b292a667dc8f264f5d72148abb746a95ab25abe36852c98f3fb9"
+  },
+  {
+    "root": "project",
+    "path": ".workflow/runtime/proposal-records.mjs",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "e45cf3823c6a97d330228e32f2644d091ce2c8c818ccb1213d4a8b28a05bce19"
+  },
+  {
+    "root": "project",
+    "path": ".workflow/runtime/skill-proposals.mjs",
+    "mode": 436,
+    "owner": "core",
+    "editable": false,
+    "sha256": "19a75e24eccd3179bfc6b6c261881e3d38b1a859a363153f213c1fb802c6d77d"
+  }
+]
