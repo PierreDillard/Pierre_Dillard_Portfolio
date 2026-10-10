@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { BlobPreconditionFailedError, get, put } from '@vercel/blob';
+import { BlobError, BlobPreconditionFailedError, get, put } from '@vercel/blob';
 
 const isStoragePreview = process.env.VERCEL_ENV === 'preview'
   && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-storage';
@@ -12,8 +12,8 @@ if (!isStoragePreview || !probeRun) {
   assert.ok(process.env.BLOB_STORE_ID, 'Preview Blob store must be configured');
   assert.match(probeRun, /^[a-zA-Z0-9-]{1,64}$/, 'Invalid probe run marker');
   const documentPath = 'proof/persistence.json';
-  const readDocument = async () => {
-    const response = await get(documentPath, { access: 'private', useCache: false });
+  const readDocument = async (pathname = documentPath) => {
+    const response = await get(pathname, { access: 'private', useCache: false });
     if (!response) return null;
     assert.equal(response.statusCode, 200);
     return {
@@ -46,6 +46,12 @@ if (!isStoragePreview || !probeRun) {
   assert.ok(baseline);
   assert.deepEqual(baseline.document, baselineDocument);
 
+  const snapshotPath = `proof/snapshots/${baselineDocument.marker}.json`;
+  await put(snapshotPath, JSON.stringify(baselineDocument), {
+    access: 'private', addRandomSuffix: false, allowOverwrite: false,
+    contentType: 'application/json',
+  });
+
   const competingWrites = await Promise.allSettled([
     writeDocument({ ...baselineDocument, candidate: 'first' }, baseline.etag),
     writeDocument({ ...baselineDocument, candidate: 'second' }, baseline.etag),
@@ -53,13 +59,22 @@ if (!isStoragePreview || !probeRun) {
   assert.equal(competingWrites.filter((result) => result.status === 'fulfilled').length, 1);
   const failedWrite = competingWrites.find((result) => result.status === 'rejected');
   assert.ok(failedWrite?.status === 'rejected');
-  assert.ok(failedWrite.reason instanceof BlobPreconditionFailedError,
-    `Concurrent rejection: ${failedWrite.reason?.name}: ${failedWrite.reason?.message}`);
+  const isConcurrentConditionalConflict = failedWrite.reason instanceof BlobError
+    && failedWrite.reason.message === 'Vercel Blob: The conditional request cannot succeed due to a conflicting operation against this resource.';
+  assert.ok(failedWrite.reason instanceof BlobPreconditionFailedError || isConcurrentConditionalConflict,
+    `Unexpected concurrent rejection: ${failedWrite.reason?.message}`);
+  await assert.rejects(
+    writeDocument({ ...baselineDocument, candidate: 'stale-retry' }, baseline.etag),
+    BlobPreconditionFailedError,
+  );
 
   const winningDocument = await readDocument();
   assert.ok(winningDocument);
   assert.ok(['first', 'second'].includes(winningDocument.document.candidate));
-  await writeDocument(baselineDocument, winningDocument.etag);
+  const savedSnapshot = await readDocument(snapshotPath);
+  assert.ok(savedSnapshot);
+  assert.deepEqual(savedSnapshot.document, baselineDocument);
+  await writeDocument(savedSnapshot.document, winningDocument.etag);
   const restored = await readDocument();
   assert.ok(restored);
   assert.deepEqual(restored.document, baselineDocument);
@@ -74,6 +89,8 @@ if (!isStoragePreview || !probeRun) {
     persistentPreviousRunVerified: Boolean(expectedPreviousRun),
     concurrentWriteSuccesses: 1,
     staleWriteRejected: true,
+    concurrentConditionalConflict: isConcurrentConditionalConflict,
+    privateSnapshotVerified: true,
     restorationVerified: true,
     anonymousReadStatus: anonymousResponse.status,
   }));
