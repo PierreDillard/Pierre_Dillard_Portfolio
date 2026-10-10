@@ -6,6 +6,14 @@ export function adminAuthenticationConfigured() {
   return Boolean(process.env.AUTH_SECRET && process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET && /^\d+$/.test(process.env.ADMIN_GITHUB_ID ?? ''));
 }
 
+export function adminAuthenticationEnabled() {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isAuthenticationPreview = process.env.VERCEL_ENV === 'preview'
+    && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online'
+    && process.env.ADMIN_AUTH_PREVIEW === 'true';
+  return (isDevelopment || isAuthenticationPreview) && adminAuthenticationConfigured();
+}
+
 export function adminModeEnabled() {
   if (process.env.NODE_ENV !== 'development') return false;
   return process.env.ADMIN_REQUIRE_AUTH !== 'true' || adminAuthenticationConfigured();
