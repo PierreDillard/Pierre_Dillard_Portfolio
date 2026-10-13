@@ -53,3 +53,13 @@ Code testé : `3ee43735b16746b8fdd1d94fba5df6d5a5077e96`.
 - Production toujours au commit `791b7c9438584d74e22f59dd529514147428064e`. La branche de stockage n'est pas fusionnée.
 
 Limite : preuve au niveau du stockage depuis le build authentifié Vercel. Elle ne valide ni la session GitHub propriétaire ni l'édition distante de contenus réels ; ces parcours restent 04/05.
+
+## Tranche d'édition 04 — 11 octobre 2026
+
+L'adaptateur `lib/contentStorage.ts` réutilise le SDK validé. Document privé `portfolio/content.json`, brouillon/publié distincts, révision ETag obligatoire et snapshots immuables dans `portfolio/versions/`. Le document Git initial est conservé : avant la première sauvegarde distante, il sert de valeur initiale sans écriture implicite. La première sauvegarde crée aussi une version de cet état initial.
+
+Une restauration remet uniquement le brouillon, suivie si souhaité d'une publication explicite. Au plus 50 versions référencées ; une sauvegarde supplémentaire est refusée, export et retrait confirmé d'une ancienne version nécessaires. Le retrait enlève d'abord la référence conditionnellement, puis essaie la suppression de ce snapshot ; un échec de suppression laisse un snapshot orphelin, sans faire échouer faussement la mise à jour déjà réussie.
+
+Un snapshot écrit avant un conflit final ou une panne peut rester orphelin. La limite de 50 s'applique à l'historique référencé, pas à ces objets. Aucune purge automatique : maintenance propriétaire après export et vérification des références. Surveiller ces objets et les quotas du store ; ne pas affirmer que tout le stockage historique est borné.
+
+Le lecteur public extrait seulement l'état publié et exclut les fiches brouillon. L'aperçu privé utilise le même rendu et revérifie la session propriétaire, sans cache partagé. Le flag d'édition est Preview uniquement, branche exacte. Le guide éditorial décrit sauvegarde/publication/export/restauration et reprise d'une session expirée. Vérifications locales simulées et runtime ne prouvent pas encore la persistance réelle de cette nouvelle route : voir la tâche 04 pour les résultats de Preview.

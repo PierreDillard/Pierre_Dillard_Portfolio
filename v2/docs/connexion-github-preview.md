@@ -27,7 +27,7 @@ Redéployer la branche avec les nouvelles variables, puis ouvrir :
 Si Vercel demande une connexion à la Preview, utiliser le compte propriétaire Vercel avant le test GitHub.
 Se connecter avec GitHub : la page doit afficher « Tu es connecté avec le compte propriétaire. » puis permettre la déconnexion. Un autre compte GitHub doit être refusé. Après déconnexion, la page doit proposer à nouveau la connexion et `/api/auth/session` ne doit plus retourner de session propriétaire.
 
-L'éditeur `/admin` et ses API restent fermés dans cette première tranche. E2 adaptera leurs lecteurs et écritures à Blob après la réussite d'E1. Ne pas confondre le succès de cette page de connexion avec une sauvegarde persistante du portfolio.
+Sans `ADMIN_CONTENT_PREVIEW=true`, l'éditeur `/admin` et ses API restent fermés dans cette première tranche. La tranche d'édition utilise ce flag séparé et requiert `BLOB_STORE_ID` ainsi que la configuration OAuth complète. Ne pas confondre le succès de cette page de connexion avec une sauvegarde persistante du portfolio.
 
 ## Contrôles existants et limites
 

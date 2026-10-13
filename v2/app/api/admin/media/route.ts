@@ -3,6 +3,9 @@ import { readdir, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAccessAllowed } from '@/lib/adminAccess';
+import { remoteContentEnabled } from '@/lib/contentStorage';
+import { siteContent } from '@/content/site';
+export const dynamic = 'force-dynamic';
 
 const mediaPath = path.join(process.cwd(), 'public', 'media');
 const uploadPath = path.join(mediaPath, 'uploads');
@@ -10,6 +13,10 @@ const allowedTypes: Record<string, string> = { 'image/png': '.png', 'image/jpeg'
 
 export async function GET(request: NextRequest) {
   if (!(await adminAccessAllowed(request))) return new Response('Not found', { status: 404 });
+  if (remoteContentEnabled()) {
+    const sources = [siteContent.profile.portraitSrc, siteContent.profile.cvSrc, ...siteContent.projects.flatMap(project => project.media.flatMap(media => [media.src, ...(media.poster ? [media.poster] : [])])), ...siteContent.notes.flatMap(note => note.heroImage ? [note.heroImage.src] : [])];
+    return NextResponse.json([...new Set(sources)].sort(), { headers: { 'Cache-Control': 'private, no-store' } });
+  }
   const baseFiles = await readdir(mediaPath, { withFileTypes: true });
   const uploads = await readdir(uploadPath).catch(() => []);
   const files = [...baseFiles.filter((entry) => entry.isFile()).map((entry) => `/media/${entry.name}`), ...uploads.map((name) => `/media/uploads/${name}`)];
@@ -17,6 +24,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (remoteContentEnabled()) return new Response('Les imports distants seront disponibles avec la médiathèque.', { status: 404 });
   if (!(await adminAccessAllowed(request, true))) return new Response('Not found', { status: 404 });
   try {
     const form = await request.formData();

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { auth, signIn, signOut } from '@/auth';
-import { adminAuthenticationEnabled } from '@/lib/adminAccess';
+import { adminModeEnabled, adminAuthenticationEnabled } from '@/lib/adminAccess';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,7 +27,7 @@ export default async function AdminConnectionPage() {
     <p>{isOwner
       ? 'Tu es connecté avec le compte propriétaire.'
       : 'Connecte-toi avec ton compte GitHub pour accéder à l’administration.'}</p>
-    {isOwner && <p>L’édition en ligne sera disponible après la validation de cette connexion.</p>}
+    {isOwner && adminModeEnabled() && <p><a className="button" href="/admin">Ouvrir l’éditeur</a></p>}
     <form action={isOwner ? disconnectOwner : connectOwner}>
       <button className="button" type="submit">{isOwner ? 'Se déconnecter' : 'Se connecter avec GitHub'}</button>
     </form>

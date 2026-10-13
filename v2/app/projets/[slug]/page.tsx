@@ -2,16 +2,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/SiteHeader';
 import { MediaFigure } from '@/components/MediaFigure';
-import { getProject, projects } from '@/content/projects';
-import { siteContent } from '@/content/site';
+import { readRenderedContent } from '@/lib/renderedContent';
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const siteContent = await readRenderedContent();
+  const project = siteContent.projects.find(project => project.slug === slug && project.visibility !== 'draft');
   if (!project) notFound();
   return (
     <>

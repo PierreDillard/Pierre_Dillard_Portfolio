@@ -8,11 +8,3 @@ export interface JournalNote {
   sections: { heading: string; body: string }[];
   sources: { label: string; href: string }[];
 }
-
-import { siteContent } from './site';
-
-export const notes = siteContent.notes.filter((note) => note.visibility !== 'draft');
-
-export function getNote(slug: string) {
-  return notes.find((note) => note.slug === slug);
-}
