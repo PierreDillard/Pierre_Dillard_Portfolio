@@ -12,7 +12,7 @@ Project: `pierre-dillard-portfolio`. Private store: `portfolio-storage-preview`,
 
 Vercel OIDC provides server/build access to the private store. Do not send credentials to browsers or evidence records. Production must use a separate store; creating it and selecting its region require a separate authorized action.
 
-Remote editing requires the exact `dev/portfolio-admin-online` Preview branch, `ADMIN_AUTH_PREVIEW=true`, `ADMIN_CONTENT_PREVIEW=true`, complete GitHub owner authentication, and `BLOB_STORE_ID`. Local editing continues to use Git content; production administration stays closed.
+Remote editing requires the exact `dev/portfolio-admin-online` Preview branch, `ADMIN_AUTH_PREVIEW=true`, `ADMIN_CONTENT_PREVIEW=true`, complete GitHub owner authentication, and `BLOB_STORE_ID`. Local editing continues to use Git content; production administration stays closed unless explicitly configured as described below.
 
 ## Content model and conditional writes
 
@@ -53,3 +53,13 @@ Export the remote document and individual snapshots before migration. Verify the
 For a future migration, verify imported hashes/content, access rules, conflicts, restoration, and reader behavior before switching. Retain the former source until recovery is validated. Supabase remains an alternative if relational needs or Blob limits justify it. A code rollback and content restoration are separate operations.
 
 See the [Blob SDK reference](https://vercel.com/docs/vercel-blob/using-blob-sdk) and [editorial workflow](editorial-workflow.md). Local mocked tests do not prove the remote service. Final production activation and media/typography validation remain tasks 05–07.
+
+## Production activation
+
+Production activation is explicit and restricted to `master`. Configure a separate GitHub OAuth application with homepage `https://pierre-dillard-portfolio.vercel.app` and callback `https://pierre-dillard-portfolio.vercel.app/api/auth/callback/github`. Configure these Vercel variables for **Production only**: `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, a new random `AUTH_SECRET`, `ADMIN_GITHUB_ID=110824159`, and `AUTH_URL=https://pierre-dillard-portfolio.vercel.app`. Do not reuse Preview OAuth secrets.
+
+Create a separate private production Blob store and connect it to Production only. Store creation/region selection remains a separately authorized action. Do not reconnect the Preview store. The initial production document is seeded from Git on the first owner save; Preview drafts/history are not migrated automatically. Export and verify any desired published Preview content before an explicitly authorized import.
+
+Only after configuration is complete, set `ADMIN_PRODUCTION_ENABLED=true` for Production and deploy the integrated Git SHA. With the flag disabled, a wrong branch, or no production store, production remote administration stays closed. Incomplete OAuth configuration also refuses authentication. Existing owner-session, origin checks, revision conflicts and private draft controls apply unchanged.
+
+Verify owner sign-in, save/reload, publication, restoration, mobile behavior and persistence after redeployment on the official origin. Built-server tests with synthetic sessions prove access checks, not real GitHub sign-in or production Blob persistence. Disable `ADMIN_PRODUCTION_ENABLED` and redeploy to close administration; this also returns public readers to Git content. Export production content before rollback; code rollback does not restore data.

@@ -4,11 +4,12 @@ import { randomBytes } from 'node:crypto';
 import { setTimeout } from 'node:timers/promises';
 import { encode } from 'next-auth/jwt';
 
+const environment = process.argv.includes('--production') ? 'production' : 'preview';
 const origin = 'http://localhost:4089';
 const secret = randomBytes(32).toString('hex');
 const ownerId = '110824159';
 const server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '4089'], {
-  env: { ...process.env, NODE_ENV: 'production', VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'dev/portfolio-admin-online', ADMIN_AUTH_PREVIEW: 'true', ADMIN_CONTENT_PREVIEW: 'true', AUTH_URL: origin, AUTH_SECRET: secret, AUTH_GITHUB_ID: 'fake-client', AUTH_GITHUB_SECRET: 'fake-secret', ADMIN_GITHUB_ID: ownerId, BLOB_STORE_ID: 'test-store-without-credentials', BLOB_READ_WRITE_TOKEN: '', VERCEL_OIDC_TOKEN: '' },
+  env: { ...process.env, NODE_ENV: 'production', VERCEL_ENV: environment, VERCEL_GIT_COMMIT_REF: environment === 'production' ? 'master' : 'dev/portfolio-admin-online', ADMIN_PRODUCTION_ENABLED: environment === 'production' ? 'true' : 'false', ADMIN_AUTH_PREVIEW: 'true', ADMIN_CONTENT_PREVIEW: 'true', AUTH_URL: origin, AUTH_SECRET: secret, AUTH_GITHUB_ID: 'fake-client', AUTH_GITHUB_SECRET: 'fake-secret', ADMIN_GITHUB_ID: ownerId, BLOB_STORE_ID: 'test-store-without-credentials', BLOB_READ_WRITE_TOKEN: '', VERCEL_OIDC_TOKEN: '' },
   stdio: 'ignore',
 });
 async function request(path, options = {}) {
@@ -58,6 +59,7 @@ try {
   assert.ok(preview.headers.get('set-cookie'));
   const legacyUpload = await request('/api/admin/media', { method: 'POST', headers: { cookie: ownerCookie, Origin: origin } });
   assert.equal(legacyUpload.status, 404);
+  console.log(`[admin-content] ${environment}`);
   console.log('[admin-content] passed: anonymous/non-owner/expired denial, owner editor, foreign/missing origin denial, private storage failure, validation, private preview, no remote filesystem uploads');
   console.log('[admin-content] synthetic signed sessions; no real OAuth or Blob persistence claimed');
 } finally {

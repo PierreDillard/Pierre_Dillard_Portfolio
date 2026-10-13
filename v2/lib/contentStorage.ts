@@ -15,9 +15,14 @@ export class ContentStorageError extends Error {
   constructor(message: string, public readonly status: number) { super(message); }
 }
 export function remoteContentEnabled() {
-  return process.env.VERCEL_ENV === 'preview'
+  const isContentPreview = process.env.VERCEL_ENV === 'preview'
     && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online'
     && process.env.ADMIN_CONTENT_PREVIEW === 'true';
+  const isContentProduction = process.env.VERCEL_ENV === 'production'
+    && process.env.VERCEL_GIT_COMMIT_REF === 'master'
+    && process.env.ADMIN_PRODUCTION_ENABLED === 'true'
+    && Boolean(process.env.BLOB_STORE_ID);
+  return isContentPreview || isContentProduction;
 }
 function validateSnapshot(value: unknown): asserts value is ContentSnapshot {
   if (!value || typeof value !== 'object') throw new Error('Version invalide.');

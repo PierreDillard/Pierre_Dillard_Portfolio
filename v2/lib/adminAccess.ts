@@ -12,7 +12,9 @@ export function adminAuthenticationEnabled() {
   const isAuthenticationPreview = process.env.VERCEL_ENV === 'preview'
     && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online'
     && process.env.ADMIN_AUTH_PREVIEW === 'true';
-  return (isDevelopment || isAuthenticationPreview) && adminAuthenticationConfigured();
+  const isAuthenticationProduction = process.env.VERCEL_ENV === 'production'
+    && remoteContentEnabled() && Boolean(process.env.AUTH_URL);
+  return (isDevelopment || isAuthenticationPreview || isAuthenticationProduction) && adminAuthenticationConfigured();
 }
 
 export function adminModeEnabled() {

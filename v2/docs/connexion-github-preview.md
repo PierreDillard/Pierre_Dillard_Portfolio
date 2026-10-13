@@ -36,6 +36,6 @@ If Vercel requests Preview authentication, sign in with the Vercel owner account
 
 Pierre confirmed real owner access, sign-out, and refusal of another account during task 04. Saving, publication, restoration, and mobile use were subsequently confirmed. The published title survived the October 13 redeployment.
 
-`npm run build` checks compilation/types. `node scripts/verify-auth-preview.mjs` checks five built-server configurations: production closed, wrong branch closed, flag disabled, secrets missing, and configured Preview authentication. Its OAuth credentials are fictitious; it does not authenticate a real GitHub user. Missing required configuration closes the application routes with 404.
+`npm run build` checks compilation/types. `node scripts/verify-auth-preview.mjs` checks twelve built-server configurations, including default production closure, explicit production activation, wrong branch, disabled flags, missing store/OAuth/origin, and configured Preview authentication. `node scripts/verify-admin-content.mjs --production` also checks owner/visitor/session/origin protections in production mode with synthetic sessions. Its OAuth credentials are fictitious; it does not authenticate a real GitHub user. Missing required configuration closes the application routes with 404.
 
 Sources: [GitHub OAuth applications](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app), [Auth.js GitHub provider](https://authjs.dev/getting-started/providers/github).

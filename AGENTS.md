@@ -10,7 +10,7 @@ The static V1 stays at the root (`index.html`, `styles.css`, `script.js`, `asset
 
 ## Persisted data and external integrations
 
-Local editing writes `content/site.json`, backs up its previous state to `content/backups/`, and imports media to `public/media/uploads/`. Remote content editing uses GitHub owner authentication and private Vercel Blob, restricted to Preview on `dev/portfolio-admin-online`. Production administration remains closed. Remote media uploads are not implemented. Conditional writes use storage metadata ETags; do not use weak download ETags as write revisions. Validate in `v2/` with `npx tsc --noEmit --incremental false`, `npm run build`, and relevant scripts; inspect desktop/mobile behavior. GPAC/wiki captures are real sources; the skills diagram is an editorial illustration.
+Local editing writes `content/site.json`, backs up its previous state to `content/backups/`, and imports media to `public/media/uploads/`. Remote content editing uses GitHub owner authentication and private Vercel Blob, enabled on Preview for `dev/portfolio-admin-online`, or explicitly on production `master` with `ADMIN_PRODUCTION_ENABLED=true`, a separate private store and production OAuth configuration. Production remains closed by default. Remote media uploads are not implemented. Conditional writes use storage metadata ETags; do not use weak download ETags as write revisions. Validate in `v2/` with `npx tsc --noEmit --incremental false`, `npm run build`, and relevant scripts; inspect desktop/mobile behavior. GPAC/wiki captures are real sources; the skills diagram is an editorial illustration.
 
 ## Documentation maintenance
 

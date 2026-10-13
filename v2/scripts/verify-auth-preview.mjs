@@ -8,6 +8,13 @@ const configurations = [
   { name: 'other preview branch closed', environment: 'preview', branch: 'master', enabled: 'true', configured: true, opens: false },
   { name: 'disabled preview closed', environment: 'preview', branch: 'dev/portfolio-admin-online', enabled: 'false', configured: true, opens: false },
   { name: 'missing OAuth closed', environment: 'preview', branch: 'dev/portfolio-admin-online', enabled: 'true', configured: false, opens: false },
+  { name: 'production explicitly configured', environment: 'production', branch: 'master', enabled: 'false', productionEnabled: 'true', store: 'test-store', configured: true, opens: true, editor: true },
+  { name: 'production flag disabled', environment: 'production', branch: 'master', productionEnabled: 'false', store: 'test-store', configured: true, opens: false },
+  { name: 'production wrong branch', environment: 'production', branch: 'dev/portfolio-admin-online', productionEnabled: 'true', store: 'test-store', configured: true, opens: false },
+  { name: 'production missing store', environment: 'production', branch: 'master', productionEnabled: 'true', configured: true, opens: false },
+  { name: 'production missing OAuth', environment: 'production', branch: 'master', productionEnabled: 'true', store: 'test-store', configured: false, opens: false },
+  { name: 'production missing origin', environment: 'production', branch: 'master', productionEnabled: 'true', store: 'test-store', configured: true, missingOrigin: true, opens: false },
+  { name: 'preview cannot use production flag', environment: 'preview', branch: 'master', productionEnabled: 'true', store: 'test-store', configured: true, opens: false },
   { name: 'configured preview login only', environment: 'preview', branch: 'dev/portfolio-admin-online', enabled: 'true', configured: true, opens: true },
 ];
 
@@ -21,7 +28,12 @@ for (const [configurationIndex, configuration] of configurations.entries()) {
       VERCEL_ENV: configuration.environment,
       VERCEL_GIT_COMMIT_REF: configuration.branch,
       ADMIN_AUTH_PREVIEW: configuration.enabled,
-      AUTH_URL: origin,
+      ADMIN_CONTENT_PREVIEW: 'false',
+      ADMIN_PRODUCTION_ENABLED: configuration.productionEnabled ?? 'false',
+      BLOB_STORE_ID: configuration.store ?? '',
+      BLOB_READ_WRITE_TOKEN: '',
+      VERCEL_OIDC_TOKEN: '',
+      AUTH_URL: configuration.missingOrigin ? '' : origin,
       AUTH_SECRET: configuration.configured ? randomBytes(32).toString('hex') : '',
       AUTH_GITHUB_ID: configuration.configured ? 'test-client' : '',
       AUTH_GITHUB_SECRET: configuration.configured ? 'test-secret' : '',
@@ -45,7 +57,7 @@ for (const [configurationIndex, configuration] of configurations.entries()) {
     assert.ok(wasReady, 'Production test server must start');
     for (const path of ['/admin', '/api/admin/content', '/api/admin/media']) {
       const response = await fetch(origin + path, { redirect: 'manual' });
-      assert.equal(response.status, 404, `${configuration.name}: ${path} must stay closed`);
+      assert.equal(response.status, configuration.editor && path === '/admin' ? 307 : 404, `${configuration.name}: ${path} must require owner access`);
       await response.body?.cancel();
     }
     const sessionResponse = await fetch(`${origin}/api/auth/session`, { redirect: 'manual' });

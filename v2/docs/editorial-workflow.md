@@ -20,7 +20,7 @@ Use accurate captions and alt text for real captures. Identify synthetic illustr
 
 ## Edit on Vercel Preview
 
-Remote editing is restricted to Preview on `dev/portfolio-admin-online`, with both Preview flags enabled, server OAuth configuration, and a connected private Blob store. Production uses Git content and keeps administration closed; production activation belongs to task 07.
+Remote editing is restricted to Preview on `dev/portfolio-admin-online`, with both Preview flags enabled, server OAuth configuration, and a connected private Blob store. Production keeps administration closed and uses Git content by default. On `master`, `ADMIN_PRODUCTION_ENABLED=true`, a separate private store, and complete production OAuth configuration enable the same owner-only editor and published-content readers. See the production configuration in [the storage guide](stockage-et-deploiement.md).
 
 Use the [stable connection page](https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app/admin/connexion). Sign in as owner, then open the editor.
 
