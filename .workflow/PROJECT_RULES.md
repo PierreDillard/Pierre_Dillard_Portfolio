@@ -10,7 +10,7 @@ Module manifests own behavior; `.workflow-kit.json` records the installed select
 
 ## Installed modules
 
-memory@1.0.0, tasks@1.0.0, continuity@1.0.0
+bugs@1.0.0, memory@1.0.0, tasks@1.0.0, continuity@1.0.0
 
 ## session-start
 
@@ -26,6 +26,11 @@ use `project-handoff`; before context saturation use `context-relay`. Link to th
 
 
 ## task-validation
+
+<!-- module:bugs/main -->
+For bugs, invoke `bug-triage` before diagnosis, then `bug-fix-trace` for runtime evidence, a focused
+regression test when feasible and a thematic trace in `${TASKS_DIR}/bugs/`. Do not invent causes.
+
 
 <!-- module:tasks/main -->
 ## Task placement

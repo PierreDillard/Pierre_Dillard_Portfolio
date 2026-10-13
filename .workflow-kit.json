@@ -15,9 +15,37 @@
   "selected": [
     "tasks",
     "memory",
-    "continuity"
+    "continuity",
+    "bugs"
   ],
   "modules": [
+    {
+      "id": "bugs",
+      "version": "1.0.0",
+      "requires": {},
+      "rules": [
+        {
+          "id": "main",
+          "path": ".workflow/modules/bugs/rules/main.md",
+          "point": "task-validation",
+          "when": []
+        }
+      ],
+      "hooks": [],
+      "checks": [],
+      "components": [
+        {
+          "name": "bug-triage",
+          "class": "project-template"
+        },
+        {
+          "name": "bug-fix-trace",
+          "class": "project-template"
+        }
+      ],
+      "settings": {},
+      "fingerprint": "5bf72c87e347a40ca634f7d09023f4256a7c030aed699d459381686b10ca0573"
+    },
     {
       "id": "memory",
       "version": "1.0.0",
@@ -417,22 +445,6 @@
     },
     {
       "root": "project",
-      "path": ".workflow/PROJECT_RULES.md",
-      "mode": 420,
-      "owner": "core",
-      "editable": false,
-      "sha256": "5e786fd48fae5fc178d95c63b5f656db5ca763013ffb14c123fcd6a60b06ab0b"
-    },
-    {
-      "root": "project",
-      "path": ".workflow/components.tsv",
-      "mode": 420,
-      "owner": "core",
-      "editable": false,
-      "sha256": "f38b0c76f86abcbfce6118de93621b192ce7837d697f58dc5d455fe7e7b78e65"
-    },
-    {
-      "root": "project",
       "path": ".workflow/runtime/update-source.mjs",
       "mode": 436,
       "owner": "core",
@@ -446,11 +458,70 @@
       "owner": "core",
       "editable": false,
       "sha256": "138342fc648667b76b1b7c093159828f6af8de3ba8b1b3b67dc8b3197e5f44bc"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/bug-triage/SKILL.md",
+      "mode": 436,
+      "owner": "bugs",
+      "editable": false,
+      "sha256": "5bb6e1d3851da974f4b50c4ab66e21d5cc37e0317088b55da7d96b92fb0c5231"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/bug-triage/SKILL.md",
+      "mode": 436,
+      "owner": "bugs",
+      "editable": false,
+      "sha256": "5bb6e1d3851da974f4b50c4ab66e21d5cc37e0317088b55da7d96b92fb0c5231"
+    },
+    {
+      "root": "project",
+      "path": ".claude/skills/bug-fix-trace/SKILL.md",
+      "mode": 436,
+      "owner": "bugs",
+      "editable": false,
+      "sha256": "2800a2a2996999902172901fde3d9db9fa10c5cb7456058364f2700631605120"
+    },
+    {
+      "root": "project",
+      "path": ".codex/skills/bug-fix-trace/SKILL.md",
+      "mode": 436,
+      "owner": "bugs",
+      "editable": false,
+      "sha256": "2800a2a2996999902172901fde3d9db9fa10c5cb7456058364f2700631605120"
+    },
+    {
+      "root": "project",
+      "path": "tasks/bugs/README.md",
+      "mode": 436,
+      "owner": "bugs",
+      "editable": true,
+      "sha256": "35013ea52f16a0e4aec5c290706c987e64c162a9c15034f1c3c122a387abbc67"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/modules/bugs/rules/main.md",
+      "mode": 420,
+      "owner": "bugs",
+      "editable": false,
+      "sha256": "312a0e926d018a0c09c4d36ddf2e029f8985a0120a480a5fea6b237b6deba84c"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/PROJECT_RULES.md",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "0ac5ca20604f8d2d8c9cffbe5f7626a3d87828654357fca95d61cc07c705585f"
+    },
+    {
+      "root": "project",
+      "path": ".workflow/components.tsv",
+      "mode": 420,
+      "owner": "core",
+      "editable": false,
+      "sha256": "8d3da4c321641a8c57400df522a913a62433d25a161467c6a9197ef7d0d19ebb"
     }
-  ],
-  "source": {
-    "revision": "706be410661765c831095fae712e9404ce6a2384",
-    "dirty": false,
-    "fingerprint": "fa058649f18744d48fe0af0fd271ad3e438c4e499d59e70982bff59c23ae33ae"
-  }
+  ]
 }

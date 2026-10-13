@@ -2,6 +2,8 @@ component	class	dependencies	purpose
 branch-router	project-template	-	Module-managed component
 project-workflow	project-template	-	Module-managed component
 workflow-doctor	project-template	-	Module-managed component
+bug-triage	project-template	-	Module-managed component
+bug-fix-trace	project-template	-	Module-managed component
 memory-report	project-template	-	Module-managed component
 ants	project-template	-	Module-managed component
 write-task	project-template	-	Module-managed component
