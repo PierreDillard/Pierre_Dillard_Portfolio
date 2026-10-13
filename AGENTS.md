@@ -1,26 +1,26 @@
-# Project context: Portfolio Pierre Dillard
+# Project context: Pierre Dillard Portfolio
 
 ## Purpose
 
-Portfolio professionnel de Pierre Dillard, en français. Présenter CV, vidéo, monitoring, GPAC, documentation et recherches avec des faits vérifiables. L’audience recruteurs et clients est traitée à parts égales. Ne pas présenter une exploration comme une fonctionnalité livrée. La publication reste une décision séparée.
+A French-language professional portfolio for recruiters and clients. Present CV, video, monitoring, GPAC, documentation, and research using verifiable facts. Do not describe an exploration as a delivered feature. Publication remains a separate decision.
 
 ## Architecture map
 
-La V1 statique reste à la racine (`index.html`, `styles.css`, `script.js`, `assets/`). La V2 React/Next.js est dans `v2/` : `content/site.json` est la source du contenu ; `app/` contient les routes publiques et l'éditeur local ; `components/` le rendu partagé ; `public/media/` les médias ; `docs/` le guide éditorial et la provenance. Modifier le contenu dans `/admin` en développement local. L'éditeur est fermé en production jusqu'à la mise en place de l'authentification et du stockage Vercel.
+The static V1 stays at the root (`index.html`, `styles.css`, `script.js`, `assets/`). The React/Next.js V2 lives in `v2/`: `app/` contains public routes and the editor, `components/` shared rendering, `public/media/` bundled media, and `docs/` editorial guidance and evidence. Local editing uses `content/site.json`; the configured administration Preview uses private Blob draft/published content through `lib/contentStorage.ts` and `lib/renderedContent.ts`.
 
 ## Persisted data and external integrations
 
-Aucune base de données ni stockage persistant distant pour la V2 à ce stade. L'éditeur local écrit `content/site.json`, sauvegarde l'état précédent dans `content/backups/` et importe les médias dans `public/media/uploads/`. Les liens externes mènent à GPAC/GitHub ; les polices viennent de Google Fonts. Valider avec `npx tsc --noEmit --incremental false`, `npm run build` dans `v2/` et inspecter les pages desktop/mobile. Les captures GPAC et wiki sont des sources visuelles réelles ; le schéma des skills est une illustration éditoriale.
+Local editing writes `content/site.json`, backs up its previous state to `content/backups/`, and imports media to `public/media/uploads/`. Remote content editing uses GitHub owner authentication and private Vercel Blob, restricted to Preview on `dev/portfolio-admin-online`. Production administration remains closed. Remote media uploads are not implemented. Conditional writes use storage metadata ETags; do not use weak download ETags as write revisions. Validate in `v2/` with `npx tsc --noEmit --incremental false`, `npm run build`, and relevant scripts; inspect desktop/mobile behavior. GPAC/wiki captures are real sources; the skills diagram is an editorial illustration.
 
 ## Documentation maintenance
 
-Keep CLAUDE.md and AGENTS.md synchronized.
+Keep CLAUDE.md and AGENTS.md synchronized. Write developer documentation and explanatory comments in English; keep public editorial content and interface labels in French.
 
 ## Local workflow policy
 
-Read [.workflow/portfolio-workflow.md](.workflow/portfolio-workflow.md) before planning or modifying this project. Apply `branch-router` before implementation: one feature per `dev/<feature>` branch, derived from and merged into `master`. Planning and corrections to task/workflow documents may stay on the current branch; this does not authorize application edits, commits, branch creation, merges or publication. With no initial commit, prepare the bootstrap before implementation. The policy defines dependencies, validation, integration and release separately. Keep managed kit files and skill mirrors intact.
+Read [.workflow/portfolio-workflow.md](.workflow/portfolio-workflow.md) before planning or modifying this project. Apply `branch-router`: one feature per `dev/<feature>` branch, derived from and merged into `master`. Documentation/planning corrections may stay on the current branch; they do not authorize application edits, commits, branch creation, merges, or publication. With no initial commit, prepare the bootstrap first. Keep managed kit files and skill mirrors intact.
 
 <!-- workflow-kit:start -->
 Workflow authority: [.workflow/PROJECT_RULES.md](.workflow/PROJECT_RULES.md).
-Read `.workflow-kit.env` and the installed module rules; load only relevant context.
+Read `.workflow-kit.env` and installed module rules; load only relevant context.
 <!-- workflow-kit:end -->

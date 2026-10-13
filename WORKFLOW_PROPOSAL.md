@@ -1,30 +1,28 @@
-# Proposition de workflow pour le portfolio
+# Portfolio workflow proposal and installation record
 
-Source : checkout local `agent-workflow-kit`, branche `feat/agent-customization`, commit `c3dd88985d6240575c8f349a09a6ea68cfb`.
-Cible : `/home/pierre/projets/perso/portfolio_dillard`.
-État : **installé le 7 octobre 2026**, après accord de Pierre (« continue »). Le dry-run isolé s'est terminé par `DRY RUN: no target files were written`. Le contrôle `workflow-doctor.sh` a signalé 0 erreur et 0 avertissement.
+Original source: local `agent-workflow-kit`, branch `feat/agent-customization`, commit `c3dd88985d6240575c8f349a09a6ea68cfb`. Target: `/home/pierre/projets/perso/portfolio_dillard`.
 
-## Sélection minimale
+Installed October 7, 2026 after Pierre approved continuation. The isolated dry run ended with `DRY RUN: no target files were written`. Workflow doctor reported zero failures/warnings. This is historical installation evidence, not a fresh source revision claim.
 
-- `tasks` : tâches et changements atomiques (`ants`, `write-task`).
-- `memory` : conserver seulement les décisions vérifiées (`memory-report`).
-- `continuity` : suivre les captures attendues et reprendre le travail (`project-handoff`, `context-relay`).
-- Le cœur du kit ajoute aussi `branch-router`, `project-workflow`, `workflow-doctor` et `write-a-skill`, avec des miroirs locaux Claude/Codex. Aucun export global.
+## Selected capabilities
 
-## Règles ajoutées par cette sélection
+- `tasks`: atomic task/change records through `ants` and `write-task`.
+- `memory`: verified reusable decisions through `memory-report`.
+- `continuity`: captures, resumption, and handoffs through `project-handoff` and `context-relay`.
+- `bugs`: added on October 12 and committed as `70a39ed`; runtime diagnosis, regression checks, and thematic bug ledgers through `bug-triage` and `bug-fix-trace`.
 
-Le cœur demande de lire `.workflow-kit.env`, de n'appliquer que les modules installés, de charger le plus petit contexte utile, de consigner les contrôles réels, et de ne créer ni branche, commit, push, merge ou mutation externe sans autorisation. Il désigne `.claude/skills/` comme source et `.codex/skills/` comme miroir généré.
+The core also supplies `branch-router`, `project-workflow`, and `workflow-doctor`. `write-a-skill` was retained as a local skill through the documented ownership migration. Claude/Codex mirrors remain local; no global export was enabled.
 
-`tasks` demande de reprendre une tâche existante à son emplacement, sinon de créer `tasks/todo/<effort>/`, de noter la branche lorsqu'elle est connue, et de suivre `ants` et `write-task` pour chaque changement significatif.
+## Activated rules
 
-`memory` demande de lire `tasks/PROJECT_MEMORY.md` comme index, puis uniquement la mémoire pertinente ; `tasks/DECISIONS.md` indexe les décisions durables, et `memory-report` conserve seulement les connaissances vérifiées.
+Read `.workflow-kit.env`, apply only installed modules, load the smallest useful context, and record actual checks. Branch creation, commits, pushes, merges, and external mutations require authorization. `.claude/skills/` is canonical for managed skills; `.codex/skills/` is the generated mirror.
 
-`continuity` demande de lire un handoff de branche seulement s'il a moins de 14 jours ; d'utiliser `project-handoff` avant de quitter un travail inachevé et `context-relay` avant saturation du contexte, en reliant le handoff à l'effort existant.
+Resume tasks at their existing locations, otherwise use `tasks/todo/<effort>/`. Record their branches and use `ants`/`write-task` for meaningful changes. Read project memory through its index; raw evidence remains in tasks/bugs. Read branch handoffs only when younger than 14 days, and link unfinished work to its existing effort.
 
-Les textes exacts sont dans le checkout de référence : `templates/project/.workflow/base-rules.md`, `modules/tasks/rules/main.md`, `modules/memory/rules/main.md`, `modules/continuity/rules/main.md`.
+For bugs, triage before diagnosis, confirm hypotheses at runtime, retain a focused regression test where feasible, and write thematic evidence. Source reading alone is not root-cause confirmation.
 
-## Plan d'installation vérifié
+## Installation boundaries
 
-L’installation a créé `.workflow-kit.json`, `.workflow/`, `.workflow-kit.env`, `CLAUDE.md`, `AGENTS.md`, les skills locaux `.claude/skills/` et `.codex/skills/`, les scripts/hook du kit et les index `tasks/PROJECT_MEMORY.md` et `tasks/DECISIONS.md`. Aucun fichier du site n’a été modifié par l’installation et aucun skill n’a été exporté dans les répertoires globaux.
+Installation created the inventory, workflow rules/configuration, agent instructions, local skills/mirrors, kit scripts/hooks, and memory/decision indexes. It did not change application files or export global skills. The original source contract required explicit approval before activating workflow rules; approval followed presentation of this proposal and target. Dry run, installation, doctor, and site-link checks were run.
 
-Le contrat de la branche (`docs/agent-customization.md`) exige un accord explicite avant l'activation de règles ou d'étapes de workflow, même lorsqu'elles viennent des modules officiels. L’accord a été donné après présentation de cette proposition et de sa cible ; le dry-run, l’installation, `workflow-doctor.sh` et la vérification des liens du site ont été exécutés.
+Exact active module rules are installed under `.workflow/modules/`; `.workflow-kit.json` records ownership/provenance. Preserve editable local policies and follow the kit's installation/update mechanism rather than editing managed outputs.

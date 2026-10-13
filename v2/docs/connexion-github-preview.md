@@ -1,38 +1,41 @@
-# Connexion propriétaire GitHub — Preview
+# GitHub owner authentication — Preview
 
-La tâche 04 commence par une vraie session propriétaire, avant ouverture de l'éditeur et adaptation du stockage.
+The remote editor requires a real owner session and a configured private store. Authentication and persistent saving are separate checks.
 
-## Application OAuth à créer
+## OAuth application
 
-Ouvrir https://github.com/settings/applications/new avec le compte PierreDillard.
-- Application name : `Portfolio Dillard — Preview`.
-- Homepage URL : `https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app`.
-- Authorization callback URL : `https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app/api/auth/callback/github`.
-- Device Flow inutile pour ce parcours web.
+Using the PierreDillard account, open [GitHub OAuth application settings](https://github.com/settings/developers), or [create an application](https://github.com/settings/applications/new).
 
-Enregistrer l'application puis générer un Client Secret.
-Dans Vercel → projet `pierre-dillard-portfolio` → Settings → Environment Variables, ajouter :
-- `AUTH_GITHUB_ID` : Client ID de l'application.
-- `AUTH_GITHUB_SECRET` : Client Secret de l'application (valeur sensible côté serveur).
+- Application name: `Portfolio Dillard — Preview`.
+- Homepage URL: `https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app`.
+- Authorization callback URL: `https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app/api/auth/callback/github`.
+- Device Flow is unnecessary for this web flow.
 
-Limiter ces deux variables à **Preview**, branche `dev/portfolio-admin-online`. Ne pas ajouter les secrets en production ou les copier dans le chat.
+Generate a Client Secret. In Vercel, select `pierre-dillard-portfolio` → Settings → Environment Variables. Restrict the following settings to **Preview**, branch `dev/portfolio-admin-online`:
 
-Déjà préparés par l'agent, sur cette même branche Preview : `AUTH_SECRET` aléatoire sensible, `ADMIN_GITHUB_ID=110824159`, `ADMIN_AUTH_PREVIEW=true`, `AUTH_URL` égal à l'URL stable ci-dessus. Aucun secret dans ce document.
+| Variable | Meaning |
+|---|---|
+| `AUTH_GITHUB_ID` | OAuth application's Client ID, not the account ID |
+| `AUTH_GITHUB_SECRET` | OAuth application's server-side Client Secret |
+| `ADMIN_GITHUB_ID` | Authorized account's numeric ID: `110824159` |
+| `AUTH_SECRET` | Long random server-side authentication secret |
+| `AUTH_URL` | Stable HTTPS Preview origin shown above |
+| `ADMIN_AUTH_PREVIEW` | `true` to enable Preview authentication |
+| `ADMIN_CONTENT_PREVIEW` | `true` to enable remote editing |
+| `BLOB_STORE_ID` | Private store connected to Preview |
 
-## Validation à effectuer après configuration
+Do not publish secrets, paste them into chat, or configure Preview credentials in production. Redeploy after changing environment variables.
 
-Redéployer la branche avec les nouvelles variables, puis ouvrir :
-`https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app/admin/connexion`.
+## Use the stable origin
 
-Si Vercel demande une connexion à la Preview, utiliser le compte propriétaire Vercel avant le test GitHub.
-Se connecter avec GitHub : la page doit afficher « Tu es connecté avec le compte propriétaire. » puis permettre la déconnexion. Un autre compte GitHub doit être refusé. Après déconnexion, la page doit proposer à nouveau la connexion et `/api/auth/session` ne doit plus retourner de session propriétaire.
+Start authentication at [the stable connection page](https://pierre-dillard-portfolio-git-dev-d872a9-pierredillards-projects.vercel.app/admin/connexion). Starting on a deployment-specific hostname while GitHub returns to the stable hostname prevents the temporary cookie from following the same origin. This mismatch was observed in October 12 logs. Stale or blocked cookies can also prevent OAuth checks; the generic `InvalidCheck` message alone does not distinguish these causes.
 
-Sans `ADMIN_CONTENT_PREVIEW=true`, l'éditeur `/admin` et ses API restent fermés dans cette première tranche. La tranche d'édition utilise ce flag séparé et requiert `BLOB_STORE_ID` ainsi que la configuration OAuth complète. Ne pas confondre le succès de cette page de connexion avec une sauvegarde persistante du portfolio.
+If Vercel requests Preview authentication, sign in with the Vercel owner account before the GitHub test. A successful GitHub owner connection should allow access to `/admin`. Other accounts must be refused. After signing out, `/api/auth/session` must no longer return the owner session.
 
-## Contrôles existants et limites
+## Validation and limits
 
-`npm run build` vérifie types et compilation. `node scripts/verify-auth-preview.mjs` lance cinq serveurs Next.js construits : production fermée, autre branche fermée, flag désactivé fermé, secrets absents fermés, Preview configurée limitée à la connexion. Les routes éditeur restent 404. Une action légitime redirige vers GitHub et une action d'origine étrangère est refusée.
+Pierre confirmed real owner access, sign-out, and refusal of another account during task 04. Saving, publication, restoration, and mobile use were subsequently confirmed. The published title survived the October 13 redeployment.
 
-Les identifiants OAuth du test local sont fictifs ; ce contrôle n'authentifie aucun compte GitHub réel. Session propriétaire, autre compte, expiration et cookies HTTPS doivent encore être vérifiés sur l'URL Preview réelle. Les secrets manquants ferment la connexion avec 404.
+`npm run build` checks compilation/types. `node scripts/verify-auth-preview.mjs` checks five built-server configurations: production closed, wrong branch closed, flag disabled, secrets missing, and configured Preview authentication. Its OAuth credentials are fictitious; it does not authenticate a real GitHub user. Missing required configuration closes the application routes with 404.
 
-Sources : [GitHub](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app), [Auth.js](https://authjs.dev/getting-started/providers/github).
+Sources: [GitHub OAuth applications](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app), [Auth.js GitHub provider](https://authjs.dev/getting-started/providers/github).

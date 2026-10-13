@@ -1,12 +1,12 @@
-# Inventaire des contributions de Pierre au wiki GPAC
+# Pierre's GPAC wiki contribution inventory
 
-Source : historique Git **local** de `/home/pierre/projets/pro/GPAC/wiki`, auteur `PierreDillard`, commits non-merge visibles dans `--all` le 2026-10-07. La correspondance de l’auteur a été vérifiée dans les métadonnées Git. `upstream/master` local est à `0e3a3d60cc31b0d2ca65d563d3bc79f8cd32fc62` ; les branches distantes n’ont pas été rafraîchies pour cet inventaire. Il s’agit donc d’un état du clone, pas d’une affirmation exhaustive sur GitHub en temps réel.
+Source: **local** Git history in `/home/pierre/projets/pro/GPAC/wiki`, author `PierreDillard`, non-merge commits visible through `--all` on October 7, 2026. Author identity was checked in Git metadata. Local `upstream/master` was `0e3a3d60cc31b0d2ca65d563d3bc79f8cd32fc62`; remote refs were not refreshed. This is a clone snapshot, not an exhaustive live GitHub claim.
 
-201 commits distincts trouvés : 50 présents dans `upstream/master` local, 151 uniquement dans les autres références locales. La présence d’un commit dans `upstream/master` prouve son intégration à cette révision ; elle ne mesure pas l’impact du changement. Les commits hors de cette référence peuvent être des recherches, des travaux encore ouverts ou des variantes déjà reprises sous d’autres SHA.
+201 distinct commits were found: 50 in local `upstream/master`, 151 only in other local refs. Inclusion proves integration at that revision, not impact. Other commits may be research, open work, or variants incorporated under different SHAs. Original commit subjects and links are preserved as evidence.
 
-## Présents dans `upstream/master` local
+## Present in local `upstream/master`
 
-| Date | Commit | Objet |
+| Date | Commit | Subject |
 |---|---|---|
 | 2026-09-25 | [530b0d6f](https://github.com/gpac/wiki/commit/530b0d6f2625ee3c421a8fdc225d8f939f15252f) | Refine introduction and small corrections |
 | 2026-09-11 | [570ac678](https://github.com/gpac/wiki/commit/570ac678cf7fb0aaa6983c91d9242bc11974c0e6) | correct formatting |
@@ -59,9 +59,9 @@ Source : historique Git **local** de `/home/pierre/projets/pro/GPAC/wiki`, auteu
 | 2024-08-05 | [537e2abe](https://github.com/gpac/wiki/commit/537e2abe4f0aef024a55b2fe67b19e9148178612) | add content-tagging-system.md |
 | 2024-08-05 | [fc5c72f0](https://github.com/gpac/wiki/commit/fc5c72f0b7e958e1fcca399a05b1332d1f95b224) | updates levels, keywords-cloud, modal |
 
-## Autres références locales
+## Other local refs
 
-| Date | Commit | Objet |
+| Date | Commit | Subject |
 |---|---|---|
 | 2026-10-02 | [616ad8a2](https://github.com/PierreDillard/wiki/commit/616ad8a263f5a15c8c611a14a816167ac9bdb95b) | Review sections 2 and 4 of the monitoring guide |
 | 2026-10-02 | [14a62aab](https://github.com/PierreDillard/wiki/commit/14a62aabee604d44b0e2a8a8c946147df3e30f35) | Add first-session monitoring guide (WIP) |
