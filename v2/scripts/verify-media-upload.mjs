@@ -19,6 +19,23 @@ process.env.AUTH_SECRET = crypto.randomBytes(32).toString('hex');
 process.env.BLOB_STORE_ID = 'synthetic-media-store';
 process.env.MEDIA_UPLOAD_MAX_BYTES = '8388608';
 const policy = loadModule('lib/mediaUploadPolicy.ts', { 'node:crypto': crypto });
+const savedEnvironment = { ...process.env };
+for (const [environment, branch, previewFlag, productionFlag, expected] of [
+  ['production', 'master', 'false', 'true', true],
+  ['production', 'master', 'true', 'false', false],
+  ['production', 'dev/portfolio-media', 'true', 'true', false],
+  ['preview', 'master', 'true', 'true', false],
+  ['preview', 'dev/portfolio-media', 'true', 'false', true],
+  ['preview', 'dev/portfolio-media', 'false', 'true', false],
+  ['development', 'master', 'true', 'true', false],
+]) {
+  Object.assign(process.env, { VERCEL_ENV: environment, VERCEL_GIT_COMMIT_REF: branch, ADMIN_MEDIA_PREVIEW: previewFlag, ADMIN_MEDIA_PRODUCTION_ENABLED: productionFlag });
+  assert.equal(policy.mediaUploadEnabled(), expected, `${environment}/${branch} activation`);
+}
+for (const name of ['VERCEL_ENV', 'VERCEL_GIT_COMMIT_REF', 'ADMIN_MEDIA_PREVIEW', 'ADMIN_MEDIA_PRODUCTION_ENABLED']) {
+  if (savedEnvironment[name] === undefined) delete process.env[name]; else process.env[name] = savedEnvironment[name];
+}
+const isProduction = process.argv.includes('--production');
 for (const limit of ['', '0', '-1', 'NaN', '1.5', '33554433']) {
   process.env.MEDIA_UPLOAD_MAX_BYTES = limit;
   assert.throws(() => policy.mediaUploadMaximumBytes(), error => error.status === 503);
@@ -78,7 +95,7 @@ const ownerId = '110824159';
 const keypair = crypto.generateKeyPairSync('ed25519');
 const secret = process.env.AUTH_SECRET;
 const server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '4091'], {
-  env: { ...process.env, NODE_ENV: 'production', VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'dev/portfolio-media', ADMIN_MEDIA_PREVIEW: 'true', ADMIN_AUTH_PREVIEW: 'true', ADMIN_CONTENT_PREVIEW: 'true', AUTH_URL: origin, AUTH_SECRET: secret, AUTH_GITHUB_ID: 'fake-client', AUTH_GITHUB_SECRET: 'fake-secret', ADMIN_GITHUB_ID: ownerId, BLOB_READ_WRITE_TOKEN: '', VERCEL_OIDC_TOKEN: '', BLOB_WEBHOOK_PUBLIC_KEY: keypair.publicKey.export({ format: 'pem', type: 'spki' }) },
+  env: { ...process.env, NODE_ENV: 'production', VERCEL_ENV: isProduction ? 'production' : 'preview', VERCEL_GIT_COMMIT_REF: isProduction ? 'master' : 'dev/portfolio-media', ADMIN_MEDIA_PREVIEW: isProduction ? 'false' : 'true', ADMIN_MEDIA_PRODUCTION_ENABLED: isProduction ? 'true' : 'false', ADMIN_PRODUCTION_ENABLED: isProduction ? 'true' : 'false', ADMIN_AUTH_PREVIEW: 'true', ADMIN_CONTENT_PREVIEW: 'true', AUTH_URL: origin, AUTH_SECRET: secret, AUTH_GITHUB_ID: 'fake-client', AUTH_GITHUB_SECRET: 'fake-secret', ADMIN_GITHUB_ID: ownerId, BLOB_READ_WRITE_TOKEN: '', VERCEL_OIDC_TOKEN: '', BLOB_WEBHOOK_PUBLIC_KEY: keypair.publicKey.export({ format: 'pem', type: 'spki' }) },
   stdio: 'ignore',
 });
 async function cookieFor(id) { return `authjs.session-token=${await encode({ secret, salt: 'authjs.session-token', token: { adminGithubId: id }, maxAge: 60 })}`; }
@@ -118,7 +135,7 @@ try {
   const signature = crypto.sign(null, Buffer.from(JSON.stringify(callback)), keypair.privateKey).toString('hex');
   assert.equal((await post(callback, { 'Content-Type': 'application/json', 'x-vercel-signature': signature })).status, 400, 'Valid provider signature reaches ticket validation without owner cookie');
   assert.equal((await post({ action: 'prepare' }, { 'Content-Type': 'application/json', 'x-vercel-signature': signature })).status, 400);
-  console.log('[media-upload] built route passed: owner/origin guards, size/type/body/path restrictions, signed callback separation, ticket tampering.');
+  console.log(`[media-upload] ${isProduction ? 'production' : 'preview'} built route passed: owner/origin guards, size/type/body/path restrictions, signed callback separation, ticket tampering.`);
   console.log('[media-upload] NO real OAuth, OIDC delegation, browser upload, provider callback, quota or persistence proof.');
 } finally {
   server.kill('SIGTERM');

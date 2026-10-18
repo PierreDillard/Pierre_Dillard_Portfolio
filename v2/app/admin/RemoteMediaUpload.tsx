@@ -7,7 +7,7 @@ const uploadEndpoint = '/api/admin/media/upload';
 interface UploadConfiguration { maximumSizeInBytes: number; contentTypes: string[] }
 interface UploadResult { pathname: string; size: number; contentType: string; sha256: string }
 async function readUploadResponse(response: Response) {
-  if ([401, 403, 404].includes(response.status)) throw new Error('Session expirée ou imports non activés sur cette Preview.');
+  if ([401, 403, 404].includes(response.status)) throw new Error('Session expirée ou imports non activés.');
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || 'Import impossible.');
   return result;

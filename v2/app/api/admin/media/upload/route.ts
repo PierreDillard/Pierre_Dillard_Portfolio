@@ -3,7 +3,7 @@ import { BlobError, issueSignedToken } from '@vercel/blob';
 import { handleUploadPresigned, type HandleUploadPresignedBody } from '@vercel/blob/client';
 import { adminAccessAllowed } from '@/lib/adminAccess';
 import { remoteContentEnabled } from '@/lib/contentStorage';
-import { MediaUploadError, mediaTypes, mediaUploadMaximumBytes, mediaUploadPreviewEnabled, prepareMediaUpload, readMediaUploadTicket } from '@/lib/mediaUploadPolicy';
+import { MediaUploadError, mediaTypes, mediaUploadMaximumBytes, mediaUploadEnabled, prepareMediaUpload, readMediaUploadTicket } from '@/lib/mediaUploadPolicy';
 import { verifyMediaUpload } from '@/lib/mediaUploadStorage';
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +11,7 @@ export const runtime = 'nodejs';
 export const maxDuration = 60;
 const privateHeaders = { 'Cache-Control': 'private, no-store' };
 const maximumRequestBytes = 8192;
-function importsEnabled() { return remoteContentEnabled() && mediaUploadPreviewEnabled(); }
+function importsEnabled() { return remoteContentEnabled() && mediaUploadEnabled(); }
 function failure(error: unknown) {
   if (error instanceof BlobError && ['Vercel Blob: Missing callback signature', 'Vercel Blob: Invalid callback signature'].includes(error.message)) {
     return NextResponse.json({ error: 'Signature de notification invalide.' }, { status: 403, headers: privateHeaders });

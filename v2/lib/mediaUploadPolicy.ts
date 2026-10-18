@@ -15,6 +15,11 @@ export function mediaUploadPreviewEnabled() {
     && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-media'
     && process.env.ADMIN_MEDIA_PREVIEW === 'true';
 }
+export function mediaUploadEnabled() {
+  return mediaUploadPreviewEnabled() || (process.env.VERCEL_ENV === 'production'
+    && process.env.VERCEL_GIT_COMMIT_REF === 'master'
+    && process.env.ADMIN_MEDIA_PRODUCTION_ENABLED === 'true');
+}
 export function mediaUploadMaximumBytes() {
   const maximum = Number(process.env.MEDIA_UPLOAD_MAX_BYTES);
   if (!Number.isSafeInteger(maximum) || maximum < 1 || maximum > maximumVerificationBytes) {

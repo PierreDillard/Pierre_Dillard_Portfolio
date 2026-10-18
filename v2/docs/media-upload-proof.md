@@ -19,7 +19,13 @@ Use the existing private Preview store and a stable media-branch Preview origin.
 - `BLOB_STORE_ID`, Vercel OIDC access and the store's `BLOB_WEBHOOK_PUBLIC_KEY` for signed callbacks.
 - `MEDIA_UPLOAD_MAX_BYTES`: a positive integer chosen after checking the actual plan, remaining capacity and usage alerts. No default limit is assumed. The E1 reread implementation caps this at 33,554,432 bytes (32 MiB), independently of provider quotas.
 
-Without opt-in the media branch remains closed. The upload proof route is Preview-only even if production administration is enabled. Existing content/auth flags remain necessary. No variables or external settings are changed by local implementation.
+Without opt-in the media branch remains closed. Production activation is separate and explicit, as described below. Existing content/auth flags remain necessary. No variables or external settings are changed by local implementation.
+
+## Production setup (approved October 18)
+
+Pierre chose to test on the official site after his merge into `master`. Reuse the existing owner OAuth configuration and the separate private `portfolio-storage-production` store; never reconnect the Preview store or change the OAuth callback. Enable `ADMIN_MEDIA_PRODUCTION_ENABLED=true` only for Production. Existing `ADMIN_PRODUCTION_ENABLED=true`, exact production `master`, complete owner authentication, canonical `AUTH_URL`, `BLOB_STORE_ID` and `BLOB_WEBHOOK_PUBLIC_KEY` remain required. Set Production `MEDIA_UPLOAD_MAX_BYTES=8388608` for a conservative 8 MiB test ceiling. The store was observed private, available, Production-only, cdg1, quota-not-exceeded on October 18; this is not proof of future capacity or successful uploads.
+
+The Production variables have not been added: automatic approval review rejected that setting mutation pending exact authorization. The opt-in and limit take effect only in a deployment containing this activation code. Preparation does not merge or deploy `master`. Disable `ADMIN_MEDIA_PRODUCTION_ENABLED` and redeploy to close imports while keeping content administration available. Existing private quarantine objects are retained; closing imports does not delete data. Real owner upload, provider callback and persistence proof remain task 05 E1. Run the checks below on the official canonical origin when that version is deployed.
 
 ## Real checks still required
 
@@ -34,6 +40,6 @@ Record deployment URL, exact deployed source, date, file sizes/hashes and each o
 
 ## Local checks
 
-Run `npx tsc --noEmit --incremental false`, `npm run build`, `node scripts/verify-media-upload.mjs`, `node scripts/verify-content-storage.mjs`, and existing admin guard checks. The media script uses synthetic sessions, signing keys and a fake storage stream. It verifies deterministic restrictions and built-route guards; it does not prove OAuth, provider constraints, uploads or persistence.
+Run `npx tsc --noEmit --incremental false`, `npm run build`, `node scripts/verify-media-upload.mjs` and `node scripts/verify-media-upload.mjs --production`, `node scripts/verify-content-storage.mjs`, and existing admin guard checks. The media script uses synthetic sessions, signing keys and a fake storage stream. It verifies deterministic restrictions and built-route guards; it does not prove OAuth, provider constraints, uploads or persistence.
 
 References: [Vercel client uploads](https://vercel.com/docs/vercel-blob/client-upload), [Blob usage and pricing](https://vercel.com/docs/vercel-blob/usage-and-pricing).

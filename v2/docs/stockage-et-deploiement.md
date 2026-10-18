@@ -63,3 +63,7 @@ Create a separate private production Blob store and connect it to Production onl
 Only after configuration is complete, set `ADMIN_PRODUCTION_ENABLED=true` for Production and deploy the integrated Git SHA. With the flag disabled, a wrong branch, or no production store, production remote administration stays closed. Incomplete OAuth configuration also refuses authentication. Existing owner-session, origin checks, revision conflicts and private draft controls apply unchanged.
 
 Verify owner sign-in, save/reload, publication, restoration, mobile behavior and persistence after redeployment on the official origin. Built-server tests with synthetic sessions prove access checks, not real GitHub sign-in or production Blob persistence. Disable `ADMIN_PRODUCTION_ENABLED` and redeploy to close administration; this also returns public readers to Git content. Export production content before rollback; code rollback does not restore data.
+
+## Media E1 production proof
+
+Owner-only private uploads can be explicitly enabled after integration on production `master` with `ADMIN_MEDIA_PRODUCTION_ENABLED=true`, in addition to the existing production admin configuration. The proposed production test ceiling is 8 MiB; no media is attached to public content in E1. See [media proof and rollback](media-upload-proof.md). Local tests and configuration preparation do not prove real uploads.
