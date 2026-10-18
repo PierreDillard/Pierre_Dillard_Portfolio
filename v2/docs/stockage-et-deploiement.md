@@ -12,7 +12,7 @@ Project: `pierre-dillard-portfolio`. Private store: `portfolio-storage-preview`,
 
 Vercel OIDC provides server/build access to the private store. Do not send credentials to browsers or evidence records. Production must use a separate store; creating it and selecting its region require a separate authorized action.
 
-Remote editing requires the exact `dev/portfolio-admin-online` Preview branch, `ADMIN_AUTH_PREVIEW=true`, `ADMIN_CONTENT_PREVIEW=true`, complete GitHub owner authentication, and `BLOB_STORE_ID`. Local editing continues to use Git content; production administration stays closed unless explicitly configured as described below.
+Remote editing requires the exact `dev/portfolio-admin-online` Preview branch (or the opt-in `dev/portfolio-media` branch with `ADMIN_MEDIA_PREVIEW=true` for the [E1 media proof](media-upload-proof.md)), `ADMIN_AUTH_PREVIEW=true`, `ADMIN_CONTENT_PREVIEW=true`, complete GitHub owner authentication, and `BLOB_STORE_ID`. Local editing continues to use Git content; production administration stays closed unless explicitly configured as described below.
 
 ## Content model and conditional writes
 

@@ -59,6 +59,7 @@ const blobSdk = {
 };
 const storage = loadModule('lib/contentStorage.ts', {
   'server-only': {}, 'node:crypto': { randomUUID }, '@vercel/blob': blobSdk,
+  './mediaUploadPolicy': { mediaUploadPreviewEnabled: () => false },
   '@/content/site': { siteContent: initial, migrateSiteContent: value => value }, '@/content/validate': validation,
 });
 const pauseWrites = () => setTimeout(510);

@@ -1,3 +1,4 @@
+import { mediaUploadPreviewEnabled } from './mediaUploadPolicy';
 import type { NextRequest } from 'next/server';
 import { auth } from '@/auth';
 import { localAdminAllowed } from './localAdmin';
@@ -10,7 +11,7 @@ export function adminAuthenticationConfigured() {
 export function adminAuthenticationEnabled() {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const isAuthenticationPreview = process.env.VERCEL_ENV === 'preview'
-    && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online'
+    && (process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online' || mediaUploadPreviewEnabled())
     && process.env.ADMIN_AUTH_PREVIEW === 'true';
   const isAuthenticationProduction = process.env.VERCEL_ENV === 'production'
     && remoteContentEnabled() && Boolean(process.env.AUTH_URL);

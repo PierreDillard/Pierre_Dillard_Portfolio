@@ -4,6 +4,10 @@ import { randomBytes } from 'node:crypto';
 import { setTimeout } from 'node:timers/promises';
 
 const configurations = [
+  { name: 'media Preview closed without opt-in', environment: 'preview', branch: 'dev/portfolio-media', enabled: 'true', mediaEnabled: 'false', contentEnabled: 'true', configured: true, opens: false },
+  { name: 'media Preview explicitly enabled', environment: 'preview', branch: 'dev/portfolio-media', enabled: 'true', mediaEnabled: 'true', contentEnabled: 'true', store: 'test-store', configured: true, opens: true, editor: true },
+  { name: 'media flag cannot open another branch', environment: 'preview', branch: 'master', enabled: 'true', mediaEnabled: 'true', contentEnabled: 'true', store: 'test-store', configured: true, opens: false },
+  { name: 'media flag cannot open production', environment: 'production', branch: 'master', enabled: 'true', mediaEnabled: 'true', contentEnabled: 'true', store: 'test-store', configured: true, opens: false },
   { name: 'production closed', environment: 'production', branch: 'dev/portfolio-admin-online', enabled: 'true', configured: true, opens: false },
   { name: 'other preview branch closed', environment: 'preview', branch: 'master', enabled: 'true', configured: true, opens: false },
   { name: 'disabled preview closed', environment: 'preview', branch: 'dev/portfolio-admin-online', enabled: 'false', configured: true, opens: false },
@@ -28,7 +32,8 @@ for (const [configurationIndex, configuration] of configurations.entries()) {
       VERCEL_ENV: configuration.environment,
       VERCEL_GIT_COMMIT_REF: configuration.branch,
       ADMIN_AUTH_PREVIEW: configuration.enabled,
-      ADMIN_CONTENT_PREVIEW: 'false',
+      ADMIN_CONTENT_PREVIEW: configuration.contentEnabled ?? 'false',
+      ADMIN_MEDIA_PREVIEW: configuration.mediaEnabled ?? 'false',
       ADMIN_PRODUCTION_ENABLED: configuration.productionEnabled ?? 'false',
       BLOB_STORE_ID: configuration.store ?? '',
       BLOB_READ_WRITE_TOKEN: '',
@@ -55,7 +60,7 @@ for (const [configurationIndex, configuration] of configurations.entries()) {
       }
     }
     assert.ok(wasReady, 'Production test server must start');
-    for (const path of ['/admin', '/api/admin/content', '/api/admin/media']) {
+    for (const path of ['/admin', '/api/admin/content', '/api/admin/media', '/api/admin/media/upload']) {
       const response = await fetch(origin + path, { redirect: 'manual' });
       assert.equal(response.status, configuration.editor && path === '/admin' ? 307 : 404, `${configuration.name}: ${path} must require owner access`);
       await response.body?.cancel();

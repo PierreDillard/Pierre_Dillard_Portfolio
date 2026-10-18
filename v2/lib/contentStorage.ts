@@ -1,3 +1,4 @@
+import { mediaUploadPreviewEnabled } from './mediaUploadPolicy';
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import { get, head, put, del, BlobError, BlobNotFoundError, BlobPreconditionFailedError } from '@vercel/blob';
@@ -16,7 +17,7 @@ export class ContentStorageError extends Error {
 }
 export function remoteContentEnabled() {
   const isContentPreview = process.env.VERCEL_ENV === 'preview'
-    && process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online'
+    && (process.env.VERCEL_GIT_COMMIT_REF === 'dev/portfolio-admin-online' || mediaUploadPreviewEnabled())
     && process.env.ADMIN_CONTENT_PREVIEW === 'true';
   const isContentProduction = process.env.VERCEL_ENV === 'production'
     && process.env.VERCEL_GIT_COMMIT_REF === 'master'
