@@ -10,7 +10,7 @@ const initial = JSON.parse(readFileSync('content/site.json', 'utf8'));
 function loadModule(filename, imports) {
   const code = ts.transpileModule(readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const module = { exports: {} };
-  vm.runInNewContext(`(function(require, module, exports) { ${code} })`, { process, Response, Date, structuredClone })(name => {
+  vm.runInNewContext(`(function(require, module, exports) { ${code} })`, { process, Response, Date, structuredClone, URL })(name => {
     if (!(name in imports)) throw new Error(`Unexpected dependency: ${name}`);
     return imports[name];
   }, module, module.exports);
@@ -61,6 +61,7 @@ const storage = loadModule('lib/contentStorage.ts', {
   'server-only': {}, 'node:crypto': { randomUUID }, '@vercel/blob': blobSdk,
   './mediaUploadPolicy': { mediaUploadPreviewEnabled: () => false },
   './mediaLibrary': { assertVerifiedMediaReferences: async () => undefined },
+  './mediaSources': loadModule('lib/mediaSources.ts', {}),
   '@/content/site': { siteContent: initial, migrateSiteContent: value => value }, '@/content/validate': validation,
 });
 const pauseWrites = () => setTimeout(510);

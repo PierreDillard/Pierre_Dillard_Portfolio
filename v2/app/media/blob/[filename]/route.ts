@@ -13,8 +13,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ fil
     const { filename } = await context.params;
     if (!remoteContentEnabled() || !validMediaFilename(filename)) return new Response('Not found', { status: 404, headers: privateHeaders });
     const owner = await adminAccessAllowed(request);
+    const stored = await readStoredContent();
+    if (stored.document.retiredMedia?.includes(filename)) return new Response('Not found', { status: 404, headers: privateHeaders });
     if (!owner) {
-      const stored = await readStoredContent();
       if (!collectMediaSources(stored.document.published, true).includes(`${storedMediaPrefix}${filename}`)) return new Response('Not found', { status: 404, headers: privateHeaders });
     }
     const record = await readVerifiedMedia(filename);

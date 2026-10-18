@@ -26,3 +26,12 @@ export function parseMediaRange(value: string | null, size: number) {
   if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || start >= size || end < start) throw new Error('Invalid range');
   return { start, end };
 }
+
+export function referencesMedia(content: SiteContent, filename: string) {
+  return collectMediaSources(content).some(source => {
+    try {
+      const pathname = new URL(source, 'https://portfolio.invalid').pathname;
+      return pathname === `${storedMediaPrefix}${filename}` || pathname === `/${quarantinePrefix}${filename}`;
+    } catch { return false; }
+  });
+}

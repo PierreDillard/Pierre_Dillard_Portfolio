@@ -1,6 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { get, head } from '@vercel/blob';
+import { assertStoredMediaNotRetired } from './contentStorage';
 import { recordVerifiedMedia } from './mediaLibrary';
 import { MediaUploadError, mediaSignatureMatches, readMediaUploadTicket, type MediaUploadTicket } from './mediaUploadPolicy';
 
@@ -9,6 +10,7 @@ export async function verifyMediaUpload(authorization: unknown) {
 }
 // Existing uploads may be reverified by an owner without an expired browser ticket.
 export async function verifyStoredMedia(ticket: MediaUploadTicket) {
+  await assertStoredMediaNotRetired(ticket.pathname);
   const abortSignal = AbortSignal.timeout(30_000);
   const metadata = await head(ticket.pathname, { abortSignal });
   if (metadata.pathname !== ticket.pathname || metadata.size !== ticket.size || metadata.contentType !== ticket.contentType) {
@@ -35,5 +37,7 @@ export async function verifyStoredMedia(ticket: MediaUploadTicket) {
   }
   const after = await head(ticket.pathname, { abortSignal });
   if (after.etag !== metadata.etag) throw new MediaUploadError('Le fichier a changé pendant sa vérification.', 409);
-  return recordVerifiedMedia({ pathname: ticket.pathname, size, contentType: ticket.contentType, sha256: hash.digest('hex'), etag: metadata.etag });
+  const record = await recordVerifiedMedia({ pathname: ticket.pathname, size, contentType: ticket.contentType, sha256: hash.digest('hex'), etag: metadata.etag });
+  await assertStoredMediaNotRetired(ticket.pathname);
+  return record;
 }

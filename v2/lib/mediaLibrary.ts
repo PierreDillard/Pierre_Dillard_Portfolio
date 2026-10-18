@@ -5,7 +5,7 @@ import { MediaUploadError, mediaTypes, mediaUploadMaximumBytes } from './mediaUp
 import { collectMediaSources, isStoredMediaSource, mediaKind, quarantinePrefix, storedMediaPrefix, validMediaFilename, verifiedMediaPrefix } from './mediaSources';
 
 export interface VerifiedMedia { pathname: string; size: number; contentType: string; sha256: string; etag: string; src: string }
-export interface LibraryMedia { filename: string; src: string; size: number; kind: 'image' | 'video' | 'pdf'; verified: boolean }
+export interface LibraryMedia { filename: string; src: string; size: number; kind: 'image' | 'video' | 'pdf'; verified: boolean; etag: string; retired: boolean }
 export async function readVerifiedMedia(filename: string): Promise<VerifiedMedia | null> {
   if (!validMediaFilename(filename)) throw new MediaUploadError('Fichier inconnu.', 404);
   const response = await get(`${verifiedMediaPrefix}${filename}.json`, { access: 'private', useCache: false, abortSignal: AbortSignal.timeout(10_000) });
@@ -25,13 +25,13 @@ export async function recordVerifiedMedia(record: Omit<VerifiedMedia, 'src'>) {
   await put(`${verifiedMediaPrefix}${filename}.json`, JSON.stringify(verified), { access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: true, abortSignal: AbortSignal.timeout(10_000) });
   return verified;
 }
-export async function listLibraryMedia(cursor?: string) {
+export async function listLibraryMedia(cursor?: string, retiredMedia: readonly string[] = []) {
   if (cursor && cursor.length > 1024) throw new MediaUploadError('Page de médias invalide.');
   const page = await list({ prefix: quarantinePrefix, limit: 24, cursor, abortSignal: AbortSignal.timeout(15_000) });
   const items = await Promise.all(page.blobs.filter(blob => validMediaFilename(blob.pathname.slice(quarantinePrefix.length))).map(async blob => {
     const filename = blob.pathname.slice(quarantinePrefix.length);
     const record = await readVerifiedMedia(filename);
-    return { filename, src: `${storedMediaPrefix}${filename}`, size: blob.size, kind: mediaKind(filename), verified: Boolean(record && record.etag === blob.etag && record.size === blob.size) } satisfies LibraryMedia;
+    return { filename, src: `${storedMediaPrefix}${filename}`, size: blob.size, kind: mediaKind(filename), etag: blob.etag, retired: retiredMedia.includes(filename), verified: Boolean(!retiredMedia.includes(filename) && record && record.etag === blob.etag && record.size === blob.size) } satisfies LibraryMedia;
   }));
   return { items, cursor: page.hasMore ? page.cursor : undefined };
 }

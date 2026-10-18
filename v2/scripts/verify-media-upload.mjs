@@ -72,6 +72,7 @@ let revisionChanged = false;
 let headCalls = 0;
 const storage = loadModule('lib/mediaUploadStorage.ts', {
   'server-only': {}, 'node:crypto': crypto, './mediaUploadPolicy': policy,
+  './contentStorage': { assertStoredMediaNotRetired: async () => undefined },
   './mediaLibrary': { recordVerifiedMedia: async record => ({ ...record, src: '/media/blob/' + record.pathname.split('/').pop() }) },
   '@vercel/blob': {
     async head(pathname) { headCalls++; return { pathname, size: metadataSize, contentType: 'image/png', etag: revisionChanged && headCalls % 2 === 0 ? 'changed' : 'initial' }; },

@@ -7,7 +7,7 @@ import ts from 'typescript';
 function loadModule(filename, imports) {
   const code = ts.transpileModule(readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const module = { exports: {} };
-  vm.runInNewContext(`(function(require, module, exports) { ${code} })`, { process, Buffer, Date, AbortSignal, Response, Headers })(name => {
+  vm.runInNewContext(`(function(require, module, exports) { ${code} })`, { process, Buffer, Date, AbortSignal, Response, Headers, URL })(name => {
     assert.ok(name in imports, `Unexpected dependency: ${name}`); return imports[name];
   }, module, module.exports);
   return module.exports;
@@ -56,7 +56,7 @@ const sdk = {
   },
 };
 const library = loadModule('lib/mediaLibrary.ts', { 'server-only': {}, '@vercel/blob': sdk, './mediaSources': sources, './mediaUploadPolicy': policy });
-const uploads = loadModule('lib/mediaUploadStorage.ts', { 'server-only': {}, 'node:crypto': crypto, '@vercel/blob': sdk, './mediaUploadPolicy': policy, './mediaLibrary': library });
+const uploads = loadModule('lib/mediaUploadStorage.ts', { 'server-only': {}, 'node:crypto': crypto, '@vercel/blob': sdk, './mediaUploadPolicy': policy, './mediaLibrary': library, './contentStorage': { assertStoredMediaNotRetired: async () => undefined } });
 const filename = `${crypto.randomUUID()}.png`;
 const pathname = sources.quarantinePrefix + filename;
 const bytes = Buffer.concat([Buffer.from('89504e470d0a1a0a', 'hex'), Buffer.alloc(32)]);
@@ -127,11 +127,16 @@ document.published.projects[0].visibility = 'published';
 response = await delivery.GET(request(), context); assert.equal(response.status, 200); await response.body.cancel();
 document.published.projects[0].media[0].src = initial.projects[0].media[0].src;
 assert.equal((await delivery.GET(request(), context)).status, 404, 'Unpublish revokes access on the next request');
+owner = true; document.retiredMedia = [filename];
+assert.equal((await delivery.GET(request(), context)).status, 404, 'Owner previews cannot expose retired objects');
+owner = false; document.published.profile.portraitSrc = verified.src;
+assert.equal((await delivery.GET(request(), context)).status, 404, 'Retirement takes precedence over a stale published reference');
+delete document.retiredMedia; document.published.profile.portraitSrc = initial.profile.portraitSrc;
 owner = true; objects.get(pathname).etag = 'replaced';
 assert.equal((await delivery.GET(request(), context)).status, 404, 'Changed objects require verification again');
 objects.get(pathname).etag = 'image-original';
 
-const api = loadModule('app/api/admin/media/library/route.ts', { 'next/server': { NextResponse: Response }, '@/lib/adminAccess': access, '@/lib/contentStorage': content, '@/lib/mediaLibrary': library, '@/lib/mediaUploadPolicy': policy, '@/lib/mediaUploadStorage': uploads });
+const api = loadModule('app/api/admin/media/library/route.ts', { 'next/server': { NextResponse: Response }, '@/lib/adminAccess': access, '@/lib/contentStorage': content, '@/lib/mediaLibrary': library, '@/lib/mediaUploadPolicy': policy, '@/lib/mediaUploadStorage': uploads, '@/lib/mediaDeletion': { MediaDeletionError: class extends Error {}, deleteUnusedMedia: async () => { throw new Error('Unexpected deletion'); } } });
 owner = false;
 assert.equal((await api.GET(request('/api/admin/media/library'))).status, 404);
 assert.equal((await api.POST(request('/api/admin/media/library', { method: 'POST', body: JSON.stringify({ filename }) }))).status, 404);
