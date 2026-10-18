@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { SiteContent } from '@/content/site';
 import type { PortfolioProject } from '@/content/types';
 import type { JournalNote } from '@/content/notes';
+import { RemoteMediaLibrary } from './RemoteMediaLibrary';
 import { RemoteMediaUpload } from './RemoteMediaUpload';
 import { ProfileEditor } from './ProfileEditor';
 import { ProjectEditor } from './ProjectEditor';
@@ -26,6 +27,9 @@ export function AdminEditor({ remote = false }: { remote?: boolean }) {
   const [revision, setRevision] = useState<string | null>(null);
   const [versions, setVersions] = useState<ContentVersion[]>([]);
   const [assets, setAssets] = useState<string[]>([]);
+  const [libraryRevision, setLibraryRevision] = useState(0);
+  const registerMedia = useCallback((sources: string[]) => setAssets(previous => [...new Set([...previous, ...sources])].sort()), []);
+  const uploadedMedia = useCallback((source: string) => { registerMedia([source]); setLibraryRevision(previous => previous + 1); }, [registerMedia]);
   const [tab, setTab] = useState<Tab>('profile');
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedNote, setSelectedNote] = useState('');
@@ -48,6 +52,7 @@ export function AdminEditor({ remote = false }: { remote?: boolean }) {
       }
     } catch { /* Storage can be unavailable; the editor still permits JSON export. */ }
     setContent(nextContent); setRevision(nextRevision); setVersions(remote ? result.versions : []); setAssets(await mediaResponse.json() as string[]);
+    if (remote) setLibraryRevision(previous => previous + 1);
     setSelectedProject(nextContent.projects[0]?.slug || ''); setSelectedNote(nextContent.notes[0]?.slug || ''); setDirty(recovered);
     if (recovered) setMessage('Modifications récupérées. Une version distante plus récente sera détectée à la sauvegarde.');
   }
@@ -65,7 +70,7 @@ export function AdminEditor({ remote = false }: { remote?: boolean }) {
     setDirty(true); setMessage('Modifications non enregistrées.');
   }
   async function upload(file: File): Promise<UploadedAsset> {
-    if (remote) throw new Error('Les nouveaux fichiers privés ne sont pas encore sélectionnables. Tu peux choisir les médias existants.');
+    if (remote) throw new Error('Importe le fichier depuis l’onglet Médiathèque, puis sélectionne-le dans ce champ.');
     const form = new FormData(); form.append('file', file);
     const response = await fetch('/api/admin/media', { method: 'POST', body: form });
     const result = await response.json() as UploadedAsset & { error?: string };
@@ -125,6 +130,6 @@ export function AdminEditor({ remote = false }: { remote?: boolean }) {
     {tab === 'profile' && <ProfileEditor profile={content.profile} onChange={(profile) => update((draft) => { draft.profile = profile; })} assets={assets} onUpload={upload} />}
     {tab === 'projects' && <><div className="editor-selection"><select aria-label="Projet à modifier" value={project?.slug || ''} disabled={saving} onChange={(event) => setSelectedProject(event.target.value)}>{content.projects.map((item) => <option value={item.slug} key={item.slug}>{item.title} {item.visibility === 'draft' ? '· brouillon' : ''}</option>)}</select><button type="button" className="editor-minor-button" onClick={() => { const item = newProject(); update((draft) => { draft.projects.push(item); }); setSelectedProject(item.slug); }}>+ Nouveau projet</button></div>{project && <><div className="editor-preview-bar"><span>{project.visibility === 'draft' ? 'BROUILLON' : 'PUBLIÉ'}</span><strong>{project.title}</strong><button type="button" disabled={content.projects[0]?.slug === project.slug} onClick={() => move('projects', project.slug, -1)}>↑ Monter</button><button type="button" disabled={content.projects.at(-1)?.slug === project.slug} onClick={() => move('projects', project.slug, 1)}>↓ Descendre</button>{project.visibility !== 'draft' && <a href={`/projets/${project.slug}`} target="_blank" rel="noopener noreferrer">Voir la page ↗</a>}<button type="button" onClick={() => { if (window.confirm(`Retirer « ${project.title} » du portfolio ? Le fichier média reste conservé.`)) { update((draft) => { draft.projects = draft.projects.filter((item) => item.slug !== project.slug); }); setSelectedProject(content.projects.find((item) => item.slug !== project.slug)?.slug || ''); } }}>Retirer la fiche</button></div><ProjectEditor project={project} onChange={(next) => { update((draft) => { draft.projects = draft.projects.map((item) => item.slug === project.slug ? next : item); }); setSelectedProject(next.slug); }} assets={assets} onUpload={upload} /></>}</>}
     {tab === 'notes' && <><div className="editor-selection"><select aria-label="Article à modifier" value={note?.slug || ''} disabled={saving} onChange={(event) => setSelectedNote(event.target.value)}>{content.notes.map((item) => <option value={item.slug} key={item.slug}>{item.title} {item.visibility === 'draft' ? '· brouillon' : ''}</option>)}</select><button type="button" className="editor-minor-button" onClick={() => { const item = newNote(); update((draft) => { draft.notes.unshift(item); }); setSelectedNote(item.slug); }}>+ Nouvel article</button></div>{note && <><div className="editor-preview-bar"><span>{note.visibility === 'draft' ? 'BROUILLON' : 'PUBLIÉ'}</span><strong>{note.title}</strong><button type="button" disabled={content.notes[0]?.slug === note.slug} onClick={() => move('notes', note.slug, -1)}>↑ Monter</button><button type="button" disabled={content.notes.at(-1)?.slug === note.slug} onClick={() => move('notes', note.slug, 1)}>↓ Descendre</button>{note.visibility !== 'draft' && <a href={`/journal/${note.slug}`} target="_blank" rel="noopener noreferrer">Voir la page ↗</a>}<button type="button" onClick={() => { if (window.confirm(`Retirer l’article « ${note.title} » ?`)) { update((draft) => { draft.notes = draft.notes.filter((item) => item.slug !== note.slug); }); setSelectedNote(content.notes.find((item) => item.slug !== note.slug)?.slug || ''); } }}>Retirer l’article</button></div><NoteEditor note={note} onChange={(next) => { update((draft) => { draft.notes = draft.notes.map((item) => item.slug === note.slug ? next : item); }); setSelectedNote(next.slug); }} assets={assets} onUpload={upload} /></>}</>}
-    {tab === 'media' && <section className="editor-form">{remote && <RemoteMediaUpload />}{!remote && <div className="editor-group"><h2>Importer une capture, vidéo ou PDF</h2><p>Importe ici un média puis sélectionne-le dans le profil, un projet ou un article.</p><label className="editor-upload-button">+ Choisir un fichier<input type="file" accept="image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,application/pdf" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file).catch((error) => setMessage(error.message)); event.target.value = ''; }} /></label></div>}<div className="editor-group"><h2>Médias disponibles</h2><div className="editor-media-grid">{assets.map((asset) => <div className="editor-media-tile" key={asset}>{/\.(png|jpe?g|webp|avif|svg)$/i.test(asset) ? <img src={asset} alt="" /> : /\.(mp4|webm)$/i.test(asset) ? <video src={asset} preload="metadata" /> : <div className="editor-pdf-tile">PDF</div>}<code>{asset}</code><button type="button" onClick={() => void navigator.clipboard.writeText(asset).then(() => setMessage('Chemin du média copié.'))}>Copier le chemin</button></div>)}</div></div></section>}
+    {tab === 'media' && <section className="editor-form">{remote && <><RemoteMediaUpload onUploaded={uploadedMedia} /><RemoteMediaLibrary revision={libraryRevision} onAvailable={registerMedia} /></>}{!remote && <div className="editor-group"><h2>Importer une capture, vidéo ou PDF</h2><p>Importe ici un média puis sélectionne-le dans le profil, un projet ou un article.</p><label className="editor-upload-button">+ Choisir un fichier<input type="file" accept="image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,application/pdf" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file).catch((error) => setMessage(error.message)); event.target.value = ''; }} /></label></div>}<div className="editor-group"><h2>Médias disponibles</h2><div className="editor-media-grid">{assets.filter(asset => !remote || !asset.startsWith('/media/blob/')).map((asset) => <div className="editor-media-tile" key={asset}>{/\.(png|jpe?g|webp|avif|svg)$/i.test(asset) ? <img src={asset} alt="" /> : /\.(mp4|webm)$/i.test(asset) ? <video src={asset} preload="metadata" /> : <div className="editor-pdf-tile">PDF</div>}<code>{asset}</code><button type="button" onClick={() => void navigator.clipboard.writeText(asset).then(() => setMessage('Chemin du média copié.'))}>Copier le chemin</button></div>)}</div></div></section>}
   </div></main>;
 }

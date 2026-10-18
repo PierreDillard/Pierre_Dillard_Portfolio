@@ -4,13 +4,14 @@ import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
 import { validateSiteContent } from '@/content/validate';
 import { migrateSiteContent } from '@/content/site';
+import { MediaUploadError } from '@/lib/mediaUploadPolicy';
 import { adminAccessAllowed } from '@/lib/adminAccess';
 import { remoteContentEnabled, readContentVersion, readStoredContent, changeStoredContent, ContentStorageError } from '@/lib/contentStorage';
 
 export const dynamic = 'force-dynamic';
 const privateHeaders = { 'Cache-Control': 'private, no-store' };
 function storageFailure(error: unknown) {
-  return NextResponse.json({ error: error instanceof ContentStorageError ? error.message : 'Stockage indisponible. Tes modifications restent dans l’éditeur ; reconnecte-toi ou réessaie.' }, { status: error instanceof ContentStorageError ? error.status : 503, headers: privateHeaders });
+  return NextResponse.json({ error: (error instanceof ContentStorageError || error instanceof MediaUploadError) ? error.message : 'Stockage indisponible. Tes modifications restent dans l’éditeur ; reconnecte-toi ou réessaie.' }, { status: (error instanceof ContentStorageError || error instanceof MediaUploadError) ? error.status : 503, headers: privateHeaders });
 }
 
 const contentPath = path.join(process.cwd(), 'content', 'site.json');

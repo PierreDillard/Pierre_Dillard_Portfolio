@@ -1,11 +1,14 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { get, head } from '@vercel/blob';
-import { MediaUploadError, mediaSignatureMatches, readMediaUploadTicket } from './mediaUploadPolicy';
+import { recordVerifiedMedia } from './mediaLibrary';
+import { MediaUploadError, mediaSignatureMatches, readMediaUploadTicket, type MediaUploadTicket } from './mediaUploadPolicy';
 
-// Quarantine objects are never exposed or attached to content in E1.
 export async function verifyMediaUpload(authorization: unknown) {
-  const ticket = readMediaUploadTicket(authorization);
+  return verifyStoredMedia(readMediaUploadTicket(authorization));
+}
+// Existing uploads may be reverified by an owner without an expired browser ticket.
+export async function verifyStoredMedia(ticket: MediaUploadTicket) {
   const abortSignal = AbortSignal.timeout(30_000);
   const metadata = await head(ticket.pathname, { abortSignal });
   if (metadata.pathname !== ticket.pathname || metadata.size !== ticket.size || metadata.contentType !== ticket.contentType) {
@@ -32,5 +35,5 @@ export async function verifyMediaUpload(authorization: unknown) {
   }
   const after = await head(ticket.pathname, { abortSignal });
   if (after.etag !== metadata.etag) throw new MediaUploadError('Le fichier a changé pendant sa vérification.', 409);
-  return { pathname: ticket.pathname, size, contentType: ticket.contentType, sha256: hash.digest('hex') };
+  return recordVerifiedMedia({ pathname: ticket.pathname, size, contentType: ticket.contentType, sha256: hash.digest('hex'), etag: metadata.etag });
 }

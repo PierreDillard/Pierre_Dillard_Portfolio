@@ -1,5 +1,6 @@
 import { mediaUploadPreviewEnabled } from './mediaUploadPolicy';
 import 'server-only';
+import { assertVerifiedMediaReferences } from './mediaLibrary';
 import { randomUUID } from 'node:crypto';
 import { get, head, put, del, BlobError, BlobNotFoundError, BlobPreconditionFailedError } from '@vercel/blob';
 import { migrateSiteContent, siteContent, type SiteContent } from '@/content/site';
@@ -58,7 +59,7 @@ export async function readStoredContent(): Promise<StoredContent> {
 }
 export async function changeStoredContent(action: 'save' | 'publish' | 'restore' | 'remove-version', revision: unknown, content?: unknown, versionId?: unknown): Promise<StoredContent> {
   if (!(revision === null || typeof revision === 'string')) throw new ContentStorageError('Révision manquante.', 400);
-  if (action === 'save') validateSiteContent(content);
+  if (action === 'save') { validateSiteContent(content); await assertVerifiedMediaReferences(content); }
   const previous = await readStoredContent();
   if (previous.revision !== revision) {
     throw new ContentStorageError('Un autre onglet a enregistré. Exporte tes modifications avant de recharger.', 409);
@@ -73,7 +74,7 @@ export async function changeStoredContent(action: 'save' | 'publish' | 'restore'
   } else {
     if (next.versions.length >= maximumVersions) throw new ContentStorageError('Historique plein (50 versions). Exporte et retire une version avant de sauvegarder.', 409);
     if (action === 'save') next.draft = content as SiteContent;
-    if (action === 'publish') next.published = structuredClone(next.draft);
+    if (action === 'publish') { await assertVerifiedMediaReferences(next.draft); next.published = structuredClone(next.draft); }
     if (action === 'restore') {
       const response = await get(`${snapshotPrefix}${versionId}.json`, { access: 'private', useCache: false });
       if (!response || response.statusCode !== 200) throw new Error('Version indisponible.');

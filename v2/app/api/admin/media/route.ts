@@ -3,7 +3,8 @@ import { readdir, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAccessAllowed } from '@/lib/adminAccess';
-import { remoteContentEnabled } from '@/lib/contentStorage';
+import { collectMediaSources } from '@/lib/mediaSources';
+import { readStoredContent, remoteContentEnabled } from '@/lib/contentStorage';
 import { siteContent } from '@/content/site';
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +15,11 @@ const allowedTypes: Record<string, string> = { 'image/png': '.png', 'image/jpeg'
 export async function GET(request: NextRequest) {
   if (!(await adminAccessAllowed(request))) return new Response('Not found', { status: 404 });
   if (remoteContentEnabled()) {
-    const sources = [siteContent.profile.portraitSrc, siteContent.profile.cvSrc, ...siteContent.projects.flatMap(project => project.media.flatMap(media => [media.src, ...(media.poster ? [media.poster] : [])])), ...siteContent.notes.flatMap(note => note.heroImage ? [note.heroImage.src] : [])];
-    return NextResponse.json([...new Set(sources)].sort(), { headers: { 'Cache-Control': 'private, no-store' } });
+    try {
+      const { document } = await readStoredContent();
+      const sources = [...collectMediaSources(siteContent), ...collectMediaSources(document.draft), ...collectMediaSources(document.published)];
+      return NextResponse.json([...new Set(sources)].sort(), { headers: { 'Cache-Control': 'private, no-store' } });
+    } catch { return NextResponse.json({ error: 'Médiathèque indisponible.' }, { status: 503, headers: { 'Cache-Control': 'private, no-store' } }); }
   }
   const baseFiles = await readdir(mediaPath, { withFileTypes: true });
   const uploads = await readdir(uploadPath).catch(() => []);

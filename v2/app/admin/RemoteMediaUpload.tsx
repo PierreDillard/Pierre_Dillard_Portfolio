@@ -12,7 +12,7 @@ async function readUploadResponse(response: Response) {
   if (!response.ok) throw new Error(result.error || 'Import impossible.');
   return result;
 }
-export function RemoteMediaUpload() {
+export function RemoteMediaUpload({ onUploaded }: { onUploaded: (source: string) => void }) {
   const [configuration, setConfiguration] = useState<UploadConfiguration | null>(null);
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<'idle' | 'uploading' | 'verifying'>('idle');
@@ -44,7 +44,7 @@ export function RemoteMediaUpload() {
       });
       controller.signal.throwIfAborted(); setPhase('verifying');
       const verified = await readUploadResponse(await fetch(uploadEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal, body: JSON.stringify({ action: 'verify', ticket: authorization.ticket }) }));
-      if (!controller.signal.aborted) { setResult(verified); setMessage('Transfert terminé et fichier vérifié. Il reste privé et n’est pas encore disponible dans le contenu.'); }
+      if (!controller.signal.aborted) { setResult(verified); onUploaded(verified.src); setMessage('Transfert terminé et fichier vérifié. Il est disponible dans la médiathèque. Enregistre le brouillon pour conserver sa sélection.'); }
     } catch (error) {
       if (mounted.current) setMessage(controller.signal.aborted ? 'Import annulé. Un transfert déjà terminé peut avoir laissé un fichier privé ; aucun contenu n’a été modifié.' : error instanceof Error ? error.message : 'Import impossible.');
     } finally { if (activeUpload.current === controller) { activeUpload.current = null; if (mounted.current) setPhase('idle'); } }
@@ -52,7 +52,7 @@ export function RemoteMediaUpload() {
   const busy = phase !== 'idle';
   return <div className="editor-group">
     <h2>Importer un fichier privé</h2>
-    <p>Les fichiers importés restent privés. Leur sélection dans le portfolio et leur publication ne sont pas encore disponibles.</p>
+    <p>Les fichiers importés restent privés jusqu’à leur utilisation dans un contenu publié.</p>
     {configuration && <p>Limite par fichier : {(configuration.maximumSizeInBytes / 1024 / 1024).toLocaleString('fr-FR')} Mio. PNG, JPEG, WebP, AVIF, MP4, WebM ou PDF.</p>}
     <label className="editor-upload-button">+ Choisir un fichier<input type="file" aria-label="Importer un fichier privé" disabled={!configuration || busy} accept={configuration?.contentTypes.join(',')} onChange={event => { const file = event.target.files?.[0]; event.target.value = ''; void importFile(file); }} /></label>
     {busy && <><p role="status">{phase === 'uploading' ? `Transfert : ${progress} %` : 'Vérification du fichier stocké…'}</p><progress value={progress} max={100} aria-label="Progression du transfert" /><button type="button" onClick={() => activeUpload.current?.abort()}>Annuler</button></>}

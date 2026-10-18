@@ -1,10 +1,11 @@
+import { isStoredMediaSource } from '@/lib/mediaSources';
 import Image from 'next/image';
 import type { ProjectMedia } from '@/content/types';
 
 export function MediaFigure({ media }: { media?: ProjectMedia }) {
   if (!media) return <figure className="media-figure"><figcaption>Média à ajouter au brouillon.</figcaption></figure>;
   const isVideo = media.kind === 'video' || /\.(mp4|webm)(\?|$)/i.test(media.src);
-  const isRemote = media.src.startsWith('https://');
+  const isRemote = (media.src.startsWith('https://') || isStoredMediaSource(media.src));
   return (
     <figure className="media-figure">
       {isVideo ? <video controls preload="metadata" poster={media.poster} aria-label={media.alt} src={media.src} /> :
